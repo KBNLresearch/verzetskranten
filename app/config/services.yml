@@ -4,7 +4,20 @@ parameters:
     sparql_endpoint: http://almere.pilod.nl/sparql
     query_path     : "%kernel.root_dir%/../var/sparql"
 
+    cache:
+        adapter:
+            name: filesystem
+            options:
+                cache_dir      : "%kernel.root_dir%/../var/cache/%kernel.environment%/app"
+                dir_permission : '0760'
+                file_permission: '0660'
+
 services:
     sparql_client:
         class    : EasyRdf\Sparql\Client
         arguments: ["%sparql_endpoint%"]
+
+    zend_cache:
+        class    : Zend\Cache\Storage\StorageInterface
+        factory  : [Zend\Cache\StorageFactory, factory]
+        arguments: ["%cache%"]
