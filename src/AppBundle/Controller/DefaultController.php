@@ -10,12 +10,15 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @param  Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $dao = $this->get('app.dao.kb');
+
         return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
+            'dao' => $dao,
         ]);
     }
 }
