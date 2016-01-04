@@ -4,11 +4,16 @@
 <div id="wrapper">
     <div class="panel panel-default">
         <div class="panel-heading">Lijst met bladen</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <input class="form-control" id="searchinput" type="search" placeholder="Zoek blad..." />
+            </div>
+        </div>
 
         <ul id="dop-list" class="list-group">
         {% for blad in dao.bladenlijstMetTitels %}
             <li class="list-group-item">
-                <span>{{ blad.wikiID }}</span>
+                <span class="wiki-title">{{ blad.wikiID }}</span>
             </li>
         {% endfor %}
         </ul>
@@ -21,4 +26,14 @@
     body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
     #wrapper { background: #FFF; margin: 1em auto; max-width: 800px; width: 95%; }
 </style>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('assets/bootstrap-list-filter-0.2.2/bootstrap-list-filter.min.js') }}"></script>
+<script>
+$('#dop-list').btsListFilter('#searchinput', {
+    itemChild: 'span.wiki-title',
+    initial  : false
+});
+</script>
 {% endblock %}
