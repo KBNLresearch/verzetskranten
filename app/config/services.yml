@@ -21,3 +21,7 @@ services:
         class    : Zend\Cache\Storage\StorageInterface
         factory  : [Zend\Cache\StorageFactory, factory]
         arguments: ["%cache%"]
+
+    app.dao.kb:
+        class    : AppBundle\Dao\Kb
+        arguments: ["@sparql_client", "%query_path%", "@zend_cache"]

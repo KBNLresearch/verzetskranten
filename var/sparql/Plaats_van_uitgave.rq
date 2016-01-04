@@ -1,0 +1,24 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bf: <http://bibframe.org/vocab/>
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
+                (STR(?titel) AS ?Blad)
+                (STR(?ppnF) AS ?PPNFysiek)
+                (STR(?ppnD) AS ?PPNDigitaal)
+                (STR(COALESCE(?plts1, ?plts2)) AS ?PlaatsUitgave)
+FROM <http://almere.pilod.nl/LydiaWinkel/>
+WHERE
+      {
+        ?ts a ns0:UndergroundPublication .
+        OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel } .  # Er zijn ook bladen zonder titel
+        ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+        OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/bf:label ?plts1 }  # Voorkeursvariant
+        OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts2 }
+        OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
+        OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
+      }
+
+ORDER BY ?winkelID 
