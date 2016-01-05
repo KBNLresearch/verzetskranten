@@ -2,17 +2,16 @@
 
 {% block body %}
 <div id="wrapper">
-
     <div role="toolbar" class="btn-group pull-left">
-        <a role="button" class="btn btn-default navbar-btn disabled">
+        <a id="btn-preview" role="button" class="btn btn-default navbar-btn disabled">
             <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
             Preview
         </a>
-        <a role="button" class="btn btn-default navbar-btn disabled">
+        <a id="btn-download" role="button" class="btn btn-default navbar-btn disabled">
             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
             Download
         </a>
-        <a role="button" class="btn btn-default navbar-btn disabled">
+        <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled">
             <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
             Export
         </a>
@@ -52,6 +51,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table-locale-all.min.js"></script>
 <script>
 (function () {
+    var wrapper     = $('#wrapper'),
+        btnPreview  = $('#btn-preview'),
+        btnDownload = $('#btn-download'),
+        btnExport   = $('#btn-export'),
+        bsTable     = $('table');
+
+    };
+
+    var onBsTableCheck = function () {
+        var selection = bsTable.bootstrapTable('getSelections');
+
+        btnPreview.toggleClass('disabled', !(1 === selection.length));
+        btnDownload.toggleClass('disabled', false);
+        btnExport.toggleClass('disabled', false);
+    };
+
+    var onBsTableUnCheck = function () {
+        var selection = bsTable.bootstrapTable('getSelections');
+
+        btnPreview.toggleClass('disabled', !(1 === selection.length));
+        btnDownload.toggleClass('disabled', (0 === selection.length));
+        btnExport.toggleClass('disabled', (0 === selection.length));
+    };
+
     bsTable.bootstrapTable({
         // options
         search          : true,
@@ -59,6 +82,12 @@
         clickToSelect   : true,
         maintainSelected: true,
         locale          : 'nl-NL',
+
+        // event listeners
+        onCheck     : onBsTableCheck,
+        onUncheck   : onBsTableUnCheck,
+        onCheckAll  : onBsTableCheck,
+        onUncheckAll: onBsTableUnCheck
     });
 }());
 </script>
