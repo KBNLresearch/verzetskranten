@@ -29,7 +29,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "easyrdf/easyrdf": "dev-master",
         "zendframework/zend-filter": "^2.5",
-        "zendframework/zend-cache": "^2.5"
+        "zendframework/zend-cache": "^2.5",
+        "ryakad/pandoc-php": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
