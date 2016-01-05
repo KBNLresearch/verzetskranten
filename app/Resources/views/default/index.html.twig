@@ -57,6 +57,32 @@
         btnExport   = $('#btn-export'),
         bsTable     = $('table');
 
+    var warn = function (msg, target) {
+        var target = (undefined === target) ? window : target,
+            html   = `
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <strong>Warning!</strong> ${msg}
+            </div>`;
+
+        $(target).prepend(html);
+    };
+
+    var onBtnPreviewClick = function () {
+        var row = bsTable.bootstrapTable('getSelections')[0],
+            wid = window.parseInt(row.id, 10);
+
+        window.location = '/wiki/' + wid;
+    };
+
+    var onBtnDownloadClick = function () {
+        warn('Deze functie is nog niet geimplementeerd', wrapper);
+    };
+
+    var onBtnExportClick = function () {
+        warn('Deze functie is nog niet geimplementeerd', wrapper);
     };
 
     var onBsTableCheck = function () {
@@ -74,6 +100,10 @@
         btnDownload.toggleClass('disabled', (0 === selection.length));
         btnExport.toggleClass('disabled', (0 === selection.length));
     };
+
+    btnPreview.on('click', onBtnPreviewClick);
+    btnDownload.on('click', onBtnDownloadClick);
+    btnExport.on('click', onBtnExportClick);
 
     bsTable.bootstrapTable({
         // options
