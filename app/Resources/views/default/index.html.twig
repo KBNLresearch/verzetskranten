@@ -1,49 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div id="wrapper">
-    <div role="toolbar" class="btn-group pull-left">
-        <a id="btn-preview" role="button" class="btn btn-default navbar-btn disabled">
-            <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
-            Preview
-        </a>
-        <a id="btn-download" role="button" class="btn btn-default navbar-btn disabled">
-            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-            Download
-        </a>
-        <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled">
-            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-            Export
-        </a>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th data-checkbox="true"><!-- --></th>
-                <th data-field="id">Winkel Nr</th>
-                <th data-field="title">Titel van blad</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for blad in dao.bladenlijstMetTitels %}
-            <tr>
-                <td data-checkbox="true"><!-- --></td>
-                <td data-field="id">{{ blad.WinkelNr }}</td>
-                <td data-field="title">{{ blad.wikiID }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div role="toolbar" class="btn-group pull-left">
+    <a id="btn-preview" role="button" class="btn btn-default navbar-btn disabled">
+        <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+        Preview
+    </a>
+    <a id="btn-download" role="button" class="btn btn-default navbar-btn disabled">
+        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+        Download
+    </a>
+    <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled">
+        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+        Export
+    </a>
 </div>
+
+<table>
+    <thead>
+        <tr>
+            <th data-checkbox="true"><!-- --></th>
+            <th data-field="id">Winkel Nr</th>
+            <th data-field="title">Titel van blad</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for blad in dao.bladenlijstMetTitels %}
+        <tr>
+            <td data-checkbox="true"><!-- --></td>
+            <td data-field="id">{{ blad.WinkelNr }}</td>
+            <td data-field="title">{{ blad.wikiID }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.css">
-<style>
-    body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
-    #wrapper { background: #FFF; margin: 1em auto; max-width: 800px; width: 95%; }
-</style>
+
 {% endblock %}
 
 {% block javascripts %}
