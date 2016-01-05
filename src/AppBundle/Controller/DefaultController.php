@@ -23,13 +23,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/wiki/{winkelnr}", name="wiki_show")
+     * @Route("/preview/{winkelnr}", name="preview_article")
      * @param  Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function wikiAction(Request $request)
+    public function previewAction(Request $request)
     {
         $dao = $this->get('app.dao.kb');
+
+
 
         return $this->render('default/wiki.html.twig', [
             'blad' => $dao->dopWinkel
