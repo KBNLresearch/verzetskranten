@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use Pandoc\Pandoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -29,12 +31,37 @@ class DefaultController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $dao = $this->get('app.dao.kb');
+        $dao    = $this->get('app.dao.kb');
+        $twig   = $this->get('twig');
+        $pandoc = new Pandoc();
 
-
-
-        return $this->render('default/wiki.html.twig', [
-            'blad' => $dao->dopWinkel
+        $wikiText = $twig->render('default/wiki.html.twig', [
+//            'blad' => $dao->dopWinkel,
         ]);
+
+        $htmlPreview = $pandoc->convert($wikiText, 'mediawiki', 'html');
+
+        return $this->render('default/preview.html.twig', [
+            'wiki_text'    => $wikiText,
+            'html_preview' => $htmlPreview,
+        ]);
+    }
+
+    /**
+     * @Route("/convert-wiki", name="convert_wiki")
+     * @param  Request $request
+     * @return string
+     */
+    public function convertAction(Request $request)
+    {
+        $pandoc = new Pandoc();
+
+        $wikiText    = $request->request->get('wikitext');
+        $htmlPreview = $pandoc->convert($wikiText, 'mediawiki', 'html');
+
+        $response = new Response();
+        $response->setContent($htmlPreview);
+
+        return $response;
     }
 }

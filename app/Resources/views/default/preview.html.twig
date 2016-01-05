@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div id="accordion" class="panel-group" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading-wiki">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-wiki" aria-expanded="true" aria-controls="collapse-wiki">
+                    Wiki Text
+                </a>
+                <button id="btn-convert" type="button" class="btn btn-default btn-xs pull-right">
+                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                    Convert
+                </button>
+            </h4>
+        </div>
+        <div id="collapse-wiki" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-wiki">
+            <div class="panel-body">
+                <pre id="wiki-text" contenteditable="true">{{ wiki_text }}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading-html">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-html" aria-expanded="false" aria-controls="collapse-html">
+                    HTML Preview
+                </a>
+            </h4>
+        </div>
+        <div id="collapse-html" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-html">
+            <div id="html-text" class="panel-body">
+                {{ html_preview|raw }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+(function () {
+    var txtWiki = $('#wiki-text'),
+        txtHtml = $('#html-text'),
+        colHtml = $('#collapse-html');
+
+    var onBtnConvertClick = function () {
+        $.ajax('{{ path('convert_wiki') }}', {
+            method : 'POST',
+            success: onConvertSuccess,
+            data   : {
+                wikitext: txtWiki.html()
+            }
+        });
+    };
+
+    var onConvertSuccess = function (html) {
+        txtHtml.html(html);
+        colHtml.collapse('show');
+    };
+
+    $('#btn-convert').on('click', onBtnConvertClick);
+}());
+</script>
+{% endblock %}
