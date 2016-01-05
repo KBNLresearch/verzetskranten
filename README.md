@@ -35,6 +35,11 @@ Voer onderstaande commandos uit via de opdrachtregel
     composer install
     php bin/console server:run
 
-
 De tool kan nu in een browser geopend worden op het volgende adres:
 [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+De installatie kan gecontroleerd worden door in de browser te navigeren naar: 
+[http://127.0.0.1:8000/config.php](http://127.0.0.1:8000/config.php)
+of op de opdrachtregel uite te voeren:
+
+    php bin/symfony_requirements
