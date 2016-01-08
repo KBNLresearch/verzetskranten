@@ -72,6 +72,17 @@ class Kb
     }
 
     /**
+     * Check if virtual property exists
+     *
+     * @param  $name Name of the property
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return $this->has($name);
+    }
+
+    /**
      * Getter for virtual properties
      *
      * @param  String $name Name of the property
@@ -80,44 +91,77 @@ class Kb
      */
     public function __get($name)
     {
-        if (!array_key_exists($name, $this->queries)) {
-            $tpl = "Property '%s' does not exist";
-            $msg = sprintf($tpl, $name);
-            throw new \Exception($msg);
-        }
+        return $this->get($name);
+    }
 
-        return $this->fromCache($name);
+    /**
+     * @param  string $name
+     * @param  array $arguments
+     * @return \EasyRdf\Graph|\EasyRdf\Sparql\Result|mixed|null
+     */
+    public function __call($name, array $arguments)
+    {
+        return $this->get($name, $arguments);
     }
 
     /**
      * Check if virtual property exists
      *
-     * @param  $name Name of the property
+     * @param  $item
      * @return bool
      */
-    function __isset($name)
+    public function has($item)
     {
-        return array_key_exists($name, $this->queries);
+        return array_key_exists($item, $this->queries);
     }
 
-
-    private function fromCache($key)
+    /**
+     * Getter for virtual properties
+     *
+     * @param  string $item
+     * @param  array  $arguments
+     * @return \EasyRdf\Graph|\EasyRdf\Sparql\Result|mixed|null
+     * @throws \Exception
+     */
+    public function get($item, array $arguments = [])
     {
+        if (!$this->has($item)) {
+            $tpl = "Property '%s' does not exist";
+            $msg = sprintf($tpl, $item);
+            throw new \Exception($msg);
+        }
+
         $data = null;
+        $key  = sprintf('item_%s__args_%s', $item, implode('-', $arguments));
+
         if (null == $this->cache) {
-            $data = $this->getData($key);
+            $data = $this->query($key, $arguments);
         } elseif (!$this->cache->hasItem($key)) {
-            $data = $this->getData($key);
+            $data = $this->query($item, $arguments);
             $this->cache->setItem($key, serialize($data));
         } else {
             $data = unserialize($this->cache->getItem($key));
         }
+
         return $data;
     }
 
-    private function getData($item)
+    /**
+     * Perform query
+     *
+     * @param  string $item
+     * @param  array $arguments
+     * @return \EasyRdf\Graph|\EasyRdf\Sparql\Result
+     */
+    private function query($item, array $arguments = [])
     {
-        $sparql = $this->queries[$item];
+        $sparql = preg_replace_callback('/%(\\d+)%/', function (array $matches) use ($arguments) {
+            $position = intval($matches[1], 10) - 1;
+            $value    = $arguments[$position];
+
+            return is_numeric($value) ? $value : "'" . urlencode(addslashes($value)) . "'";
+        }, $this->queries[$item]);
+
         return $this->sparqlClient->query($sparql);
     }
 }
