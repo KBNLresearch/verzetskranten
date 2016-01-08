@@ -1,4 +1,86 @@
-{#Dummy text#}
-'''De Geus onder studenten''' was een verzetsblad uit de Tweede Wereldoorlog dat vanaf 4 oktober 1940 tot en met 13 juli 1945 in Den Haag werd uitgegeven.
-Het blad verscheen in 1940, 1941 en 1943 maandelijks en verder onregelmatig in een oplage tussen de 250 en 8000 exemplaren.
-Het werd aanvankelijk gestencild, en vanaf november 1942 gedrukt en de inhoud bestond voornamelijk uit opinie-artikelen.
+{% verbatim %}
+{{DisclaimerVerzetskrantenproject}}
+{% endverbatim %}
+__NOTOC__
+
+{% verbatim %}{{Infobox illegaal blad{% endverbatim %}
+| titel                   = {{ blad.titel }}
+| afbeelding              = 
+| onderschrift            = dummy
+| ondertitel              = dummy
+| motto                   = dummy
+| plaats van uitgave      = {{ blad.PlaatsUitgave|default('') }}
+| verspreidingsgebied     = Studenten/universitaire wereld, mn Leiden
+| verschijningsfrequentie = {{ blad.frequentie|default('') }}
+| inhoud                  = {{ blad.inhoud|default('') }}
+| doelgroep               = Studenten/universitaire wereld
+| reproductiemethode      = aanvankelijk gestencild, en vanaf november 1942 gedrukt
+| oplage                  = tussen de 250 en 8000
+| datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('') }}
+| datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('') }}
+| formaat                 = 28cm
+| taal                    = Nederland
+| vervaardigers           = [[Jan Drion]] en [[Huib Drion]]
+| uitgevers               = dummy
+| drukkers                = dummy
+| andere betrokkenen      = dummy
+| gerelateerd             = [[Cereales vadenses (verzetsblad, Wageningen)|Cereales vadenses]], [[De Leidsche brief (verzetsblad, Leiden)|De Leidsche brief]], [[Sol justitiae: het Utrechts studentenblad (verzetsblad, Utrecht)|Sol justitiae: het Utrechts studentenblad ]]
+| opvolger van            = dummy
+| voorloper van           = dummy
+| legaal voortgezet       = dummy
+| winkelID                = {{ blad.WinkelNr }}
+| PPN                     = {{ blad.PPNFysiek|default('') }}
+| website                 = dummy
+| portaal2                = dummy
+{% verbatim %}}}{% endverbatim %}
+
+{#Eerste zin#}
+{% if 'Ongetiteld verzetsblad' != blad.titel %}'''{{ blad.titel }}''' was een verzetsblad uit de Tweede Wereldoorlog {% endif %}
+{% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}, dat vanaf {{ blad.tijdstipEersteUitgave }} tot en met {{ blad.tijdstipLaatseUitgave }}{% endif %}
+{% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}, dat vanaf {{ blad.tijdstipEersteUitgave }} {% endif %}
+{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}, dat tot en met {{ blad.tijdstipLaatseUitgave }} {% endif %}
+{% if blad.PlaatsUitgave is defined %}{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}dat {% endif %}in {{ blad.PlaatsUitgave }} {% endif %}
+{% if blad.tijdstipEersteUitgave is defined or blad.tijdstipLaatseUitgave is defined or blad.PlaatsUitgave is defined %}werd uitgegeven{% endif %}.
+{#Tweede zin#}
+{% if blad.drukkerij is defined %}Het blad werd gemaakt bij drukkerij {{ blad.drukkerij }}{% if blad.frequentie is defined or blad.oplageMin is defined or blad.oplageMax is defined %}en verscheen{% else %}.{% endif %}{% else %}
+{% if blad.frequentie is defined or blad.oplageMin is defined or blad.oplageMax is defined %}Het blad verscheen {% endif %}
+{% if blad.frequentie is defined %}{{ blad.frequentie }}{% endif %}
+{% if blad.oplageMin is defined or blad.oplageMax is defined %} in een oplage
+{% if blad.oplageMin < blad.oplageMax %} tussen de{{ blad.oplageMin }} en{{ blad.oplageMin }} exemplaren{% endif %}
+{% if blad.oplageMin == blad.oplageMax %} van{{ blad.oplageMin }} exemplaren{% endif %}{% endif %}.{% endif %}
+{#Derde zin#}
+{% if blad.vorm is defined and blad.inhoud is defined %}Het werd {{ blad.vorm }} en de inhoud bestond voornamelijk uit {{ blad.inhoud }}.{% endif %}
+{% if blad.vorm is defined and blad.inhoud is not defined %}Het werd {{ blad.vorm }}.{% endif %}
+{% if blad.vorm is not defined and blad.inhoud is defined %}De inhoud bestond voornamelijk uit {{ blad.inhoud }}.{% endif %}
+
+
+== Bij deze krant betrokken personen ==
+
+
+== Gerelateerde kranten ==
+
+
+{% verbatim %}{{Appendix||2={% endverbatim %}
+== Bronnen ==
+* {% verbatim %}{{nl}}{% endverbatim %} Lemma {{ blad.WinkelNr }} in [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers 1940-1945]], [[Lydia_Winkel|Lydia E. Winkel]] en Hans de Vries, 3e druk, 1989. [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|Full-text]] (PDF) op Wikimedia Commons.
+{% if blad.delpherLink is defined %}
+* {% verbatim %}{{nl}}{% endverbatim %} [{{ blad.delpherLink }} Afleveringen van de ''{{ blad.titel }}''] in full-text op [[Delpher|Delpher.nl]]
+{% endif %}
+{% if blad.PPNDigitaal is defined %}
+* {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
+{% endif %}
+;Overige bronnen en verwijzingen
+{% verbatim %}{{References||30em}}{% endverbatim %}
+== Noten ==
+* Dit artikel is geschreven in het kader van het [[Wikipedia:Wikiproject/Verzetskranten|Wikiproject Verzetskranten]]
+;Overige noten
+{% verbatim %}{{references|group=noot||30em}}{% endverbatim %}
+== Externe links ==
+{% verbatim %}}}{% endverbatim %}
+
+{% verbatim %}{{commonscat|Dutch_resistance_newspapers from World War II|Dutch resistance newspapers from World War II}}{% endverbatim %}
+
+== Ruwe tekst Winkel-lemma==
+''Hieronder staat de tekst over '''{{ blad.titel }} (verzetsblad, {{ blad.PlaatsUitgave }})''' uit lemma nr. {{ blad.WinkelNr }} van [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers]]. Met behulp van deze tekst (en andere bronnen) kunnen Wikipedianen het bestaande artikel verbeteren. ''De Ondergronds Pers'' is ook als [[:commons:File:PDF of De Ondergrondse Pers 1940-1945 - derde druk - 1989.pdf|full-text PDF beschikbaar]] op Wikimedia Commons, daar is onderstaande tekst dus ook terug te vinden.''
+
+<blockquote>{{ blad.fullTxt|default('') }}</blockquote>
