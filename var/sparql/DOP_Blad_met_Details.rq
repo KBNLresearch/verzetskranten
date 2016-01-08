@@ -1,0 +1,35 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bf: <http://bibframe.org/vocab/>
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
+                (STR(?titel) AS ?titel)
+                (STR(?ppnF) AS ?PPNFysiek)
+                (STR(?ppnD) AS ?PPNDigitaal)
+                (STR(?plts) AS ?PlaatsUitgave)
+                ?periodeVanVerschijnen
+                ?frequentie
+                ?delpherLink
+                ?fullTxt
+                ?catNr
+FROM <http://almere.pilod.nl/LydiaWinkel/>
+WHERE {
+    ?ts a ns0:UndergroundPublication .
+    ?ts ns0:titleDescriptiveArticle ?uniekeTitelVoorWP .
+    ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
+    OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts }
+    OPTIONAL { ?ts ns0:periodDescription ?periodeVanVerschijnen }
+    OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
+    OPTIONAL { ?ts bf:hasInstance/ns0:linkDelpher ?delpherLink }
+    OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
+    OPTIONAL { ?ts bf:contentCategory ?categorie }
+    OPTIONAL { ?ts bf:frequency ?frequentie }
+    OPTIONAL { ?ts ns0:winkelSummary/bf:annotationBody ?fullTxt }
+    OPTIONAL { ?ts bf:hasInstance/ns0:linkKBCat ?catNr }
+    FILTER (STR(?winkelID) = %1%)
+}
+
+ns2:serialFirstIssue
