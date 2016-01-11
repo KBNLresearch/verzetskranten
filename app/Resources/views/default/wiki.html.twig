@@ -34,25 +34,70 @@ __NOTOC__
 | portaal2                = dummy
 {% verbatim %}}}{% endverbatim %}
 
+{#Use string concatenation for better whitespace control#}
+{% set summary = '' %}
+{% spaceless %}
 {#Eerste zin#}
-{% if 'Ongetiteld verzetsblad' != blad.titel %}'''{{ blad.titel }}''' was een verzetsblad uit de Tweede Wereldoorlog {% endif %}
-{% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}, dat vanaf {{ blad.tijdstipEersteUitgave }} tot en met {{ blad.tijdstipLaatseUitgave }}{% endif %}
-{% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}, dat vanaf {{ blad.tijdstipEersteUitgave }} {% endif %}
-{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}, dat tot en met {{ blad.tijdstipLaatseUitgave }} {% endif %}
-{% if blad.PlaatsUitgave is defined %}{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}dat {% endif %}in {{ blad.PlaatsUitgave }} {% endif %}
-{% if blad.tijdstipEersteUitgave is defined or blad.tijdstipLaatseUitgave is defined or blad.PlaatsUitgave is defined %}werd uitgegeven{% endif %}.
+{% if 'Ongetiteld verzetsblad' != blad.titel %}
+    {% set summary = summary ~ "'''#{blad.titel}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
+{% endif %}
+{% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}
+    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave} tot en met ${blad.tijdstipLaatseUitgave} " %}
+{% endif %}
+{% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}
+    {%  set summary = summary ~ ",dat vanaf ${blad.tijdstipEersteUitgave} " %}
+{% endif %}
+{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}
+    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave} " %}
+{% endif %}
+{% if blad.PlaatsUitgave is defined %}
+    {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}
+        {% set summary = summary ~ 'dat ' %}
+    {% endif %}
+    {% set summary = summary ~ "in #{blad.PlaatsUitgave} " %}
+{% endif %}
+{% if blad.tijdstipEersteUitgave is defined or blad.tijdstipLaatseUitgave is defined or blad.PlaatsUitgave is defined %}
+    {% set summary = summary ~ 'werd uitgegeven' %}
+{% endif %}
+{% set summary = summary ~ '.' %}
 {#Tweede zin#}
-{% if blad.drukkerij is defined %}Het blad werd gemaakt bij drukkerij {{ blad.drukkerij }}{% if blad.frequentie is defined or blad.oplageMin is defined or blad.oplageMax is defined %}en verscheen{% else %}.{% endif %}{% else %}
-{% if blad.frequentie is defined or blad.oplageMin is defined or blad.oplageMax is defined %}Het blad verscheen {% endif %}
-{% if blad.frequentie is defined %}{{ blad.frequentie }}{% endif %}
-{% if blad.oplageMin is defined or blad.oplageMax is defined %} in een oplage
-{% if blad.oplageMin < blad.oplageMax %} tussen de{{ blad.oplageMin }} en{{ blad.oplageMin }} exemplaren{% endif %}
-{% if blad.oplageMin == blad.oplageMax %} van{{ blad.oplageMin }} exemplaren{% endif %}{% endif %}.{% endif %}
+{% if blad.drukkerij is defined %}
+    {% set summary = summary ~ " Het blad werd gemaakt bij drukkerij #{blad.drukkerij}" %}
+    {% if blad.frequentie is defined or blad.oplageMin is defined or blad.oplageMax is defined %}
+        {% set summary = summary ~ ' en verscheen ' %}
+    {% else %}
+        {% set summary = summary ~ '. ' %}
+    {% endif %}
+{% else %}
+    {% if blad.frequentie is defined or blad.oplageMin is defined or blad.oplageMax is defined %}
+        {% set summary = summary ~ ' Het blad verscheen' %}
+    {% endif %}
+    {% if blad.frequentie is defined %}
+        {% set summary = summary ~ " #{blad.frequentie}" %}
+    {% endif %}
+    {% if blad.oplageMin is defined or blad.oplageMax is defined %}
+        {% set summary = summary ~ ' in een oplage' %}
+        {% if blad.oplageMin < blad.oplageMax %}
+            {% set summary = summary ~ " tussen de #{blad.oplageMin} en #{blad.oplageMin} exemplaren" %}
+        {% endif %}
+        {% if blad.oplageMin == blad.oplageMax %}
+            {% set summary = summary ~ " van #{blad.oplageMin} exemplaren" %}
+        {% endif %}
+    {% endif %}
+    {% set summary = summary ~ "." %}
+{% endif %}
 {#Derde zin#}
-{% if blad.vorm is defined and blad.inhoud is defined %}Het werd {{ blad.vorm }} en de inhoud bestond voornamelijk uit {{ blad.inhoud }}.{% endif %}
-{% if blad.vorm is defined and blad.inhoud is not defined %}Het werd {{ blad.vorm }}.{% endif %}
-{% if blad.vorm is not defined and blad.inhoud is defined %}De inhoud bestond voornamelijk uit {{ blad.inhoud }}.{% endif %}
-
+{% if blad.vorm is defined and blad.inhoud is defined %}
+    {% set summary = summary ~ " Het werd #{blad.vorm} en de inhoud bestond voornamelijk uit #{blad.inhoud}." %}
+{% endif %}
+{% if blad.vorm is defined and blad.inhoud is not defined %}
+    {% set summary = summary ~ " Het werd #{blad.vorm}." %}
+{% endif %}
+{% if blad.vorm is not defined and blad.inhoud is defined %}
+    {% set summary = summary ~ " De inhoud bestond voornamelijk uit #{blad.inhoud}." %}
+{% endif %}
+{% endspaceless %}
+{{ summary|raw }}
 
 == Bij deze krant betrokken personen ==
 
