@@ -6,7 +6,6 @@ PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT ?p ?o
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-      {
-         ns0:DeOndergrondsePers ?p ?o
-      }
+WHERE {
+    ns0:DeOndergrondsePers ?p ?o
+}

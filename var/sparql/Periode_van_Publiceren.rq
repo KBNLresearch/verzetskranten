@@ -10,13 +10,12 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?begin) AS ?PerBegin)
                 (STR(?eind) AS ?PerEind)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-      {
-        ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
-        OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts }
-        OPTIONAL { ?ts ns0:periodDescription ?per }
-        OPTIONAL { ?ts bf:serialFirstIssue ?begin }
-        OPTIONAL { ?ts bf:serialLastIssue ?eind }
-        OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
-      }
+WHERE {
+    ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts }
+    OPTIONAL { ?ts ns0:periodDescription ?per }
+    OPTIONAL { ?ts bf:serialFirstIssue ?begin }
+    OPTIONAL { ?ts bf:serialLastIssue ?eind }
+    OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
+}
 ORDER BY ?winkelID

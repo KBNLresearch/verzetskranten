@@ -12,15 +12,14 @@ SELECT DISTINCT (STR(?naam) AS ?Persoon)
                 (STR(?blzBegin) AS ?Begin)
                 (STR(?blzEind) AS ?Eind)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-       {
-	     ?refPers dct:source ns0:WinkelPersoonsregister ; dct:references ?pers ;  ns0:pageNumber ?blzNr .
-	     ?refBlad dbo:connectsReferencedTo ?pers ; dct:source ?abstr ; dct:references ?blad .
-         ?blad bf:workTitle/bf:titleValue ?titel .
-	     ?abstr ns0:pageNumberStart ?blzBegin ; ns0:pageNumberEnd ?blzEind .
-         ?pers rdfs:label ?naam ; foaf:lastName ?anaam .
-         OPTIONAL { ?pers foaf:gender ?gesl }
-         BIND (xsd:integer(?blzNr) AS ?blz)
-	     FILTER ((?blz >= ?blzBegin) && (?blz <= ?blzEind))
-       }
+WHERE {
+    ?refPers dct:source ns0:WinkelPersoonsregister ; dct:references ?pers ;  ns0:pageNumber ?blzNr .
+    ?refBlad dbo:connectsReferencedTo ?pers ; dct:source ?abstr ; dct:references ?blad .
+    ?blad bf:workTitle/bf:titleValue ?titel .
+    ?abstr ns0:pageNumberStart ?blzBegin ; ns0:pageNumberEnd ?blzEind .
+    ?pers rdfs:label ?naam ; foaf:lastName ?anaam .
+    OPTIONAL { ?pers foaf:gender ?gesl }
+    BIND (xsd:integer(?blzNr) AS ?blz)
+    FILTER ((?blz >= ?blzBegin) && (?blz <= ?blzEind))
+}
 ORDER BY ?anaam

@@ -8,12 +8,11 @@ SELECT ?subj
       (STR(?naam) AS ?Persoon)
       (STR(?pagina) AS ?blz)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-      {
-        ?subj rdfs:label ?naam ;
-        ?foaf:lastName ?anaam .
-        ?ref dct:references ?subj .
-        ?ref ns0:pageNumber ?pagina .
-        MINUS { ?subj owl:sameAs ?tgh }
-      }
+WHERE {
+    ?subj rdfs:label ?naam ;
+    ?foaf:lastName ?anaam .
+    ?ref dct:references ?subj .
+    ?ref ns0:pageNumber ?pagina .
+    MINUS { ?subj owl:sameAs ?tgh }
+}
 ORDER BY ?anaam , ?pagina

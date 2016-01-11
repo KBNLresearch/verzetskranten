@@ -10,13 +10,12 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?ppnF) AS ?PPNFysiek)
                 (STR(?ppnD) AS ?PPNDigitaal)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-      {
-        ?ts a ns0:UndergroundPublication ; ns0:titleDescriptiveArticle ?wikiTitel .
-        ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
-        OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel } .
-        OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
-        OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
-      }
+WHERE {
+    ?ts a ns0:UndergroundPublication ; ns0:titleDescriptiveArticle ?wikiTitel .
+    ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel } .
+    OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
+    OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
+}
 
 ORDER BY ?winkelID

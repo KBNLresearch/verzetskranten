@@ -8,13 +8,12 @@ PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
 SELECT DISTINCT (CONCAT(?titel, " ", ?vnaam , " " , ?vv , " ", ?anaam ) AS ?Persoon)  # Je kunt ook in 1 keer rdfs:label nemen
                 (STR(?gesl) AS ?Gesl)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-       {
-	     ?refPers dct:source ns0:WinkelPersoonsregister ; dct:references ?pers .
-         ?pers foaf:lastName ?anaam .
-         OPTIONAL { ?pers foaf:firstName ?vnaam }
-         OPTIONAL { ?pers foaf:surname ?vv }
-         OPTIONAL { ?pers foaf:gender ?gesl }
-         OPTIONAL { ?pers foaf:title ?titel }
-       }
+WHERE {
+    ?refPers dct:source ns0:WinkelPersoonsregister ; dct:references ?pers .
+    ?pers foaf:lastName ?anaam .
+    OPTIONAL { ?pers foaf:firstName ?vnaam }
+    OPTIONAL { ?pers foaf:surname ?vv }
+    OPTIONAL { ?pers foaf:gender ?gesl }
+    OPTIONAL { ?pers foaf:title ?titel }
+}
 ORDER BY ?anaam

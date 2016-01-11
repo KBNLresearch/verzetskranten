@@ -6,7 +6,6 @@ PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT ?titel
 FROM <http://almere.pilod.nl/LydiaWinkel/>
-WHERE
-      {
-         ns0:DeOndergrondsePers bf:workTitle/bf:titleValue ?titel # Alleen titelwaarde (= de string) opgehaald
-      }
+WHERE {
+    ns0:DeOndergrondsePers bf:workTitle/bf:titleValue ?titel # Alleen titelwaarde (= de string) opgehaald
+}
