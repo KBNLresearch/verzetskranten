@@ -31,5 +31,3 @@ WHERE {
     OPTIONAL { ?ts bf:hasInstance/ns0:linkKBCat ?catNr }
     FILTER (STR(?winkelID) = %1%)
 }
-
-ns2:serialFirstIssue
