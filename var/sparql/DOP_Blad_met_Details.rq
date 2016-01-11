@@ -11,6 +11,11 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?plts) AS ?PlaatsUitgave)
                 ?periodeVanVerschijnen
                 ?frequentie
+                (STR(?eerste) AS ?Eerste)
+                (STR(?laatste) AS ?Laatste)
+                ?oplMin ?oplMax
+                ?inhCat
+                ?reprMeth
                 ?delpherLink
                 ?fullTxt
                 ?catNr
@@ -25,9 +30,14 @@ WHERE {
     OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
     OPTIONAL { ?ts bf:hasInstance/ns0:linkDelpher ?delpherLink }
     OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
-    OPTIONAL { ?ts bf:contentCategory ?categorie }
+    OPTIONAL { ?ts bf:contentCategory ?inhCat }
     OPTIONAL { ?ts bf:frequency ?frequentie }
+    OPTIONAL { ?ts bf:serialFirstIssue ?eerste }
+    OPTIONAL { ?ts bf:serialLastIssue ?laatste }
     OPTIONAL { ?ts ns0:winkelSummary/bf:annotationBody ?fullTxt }
     OPTIONAL { ?ts bf:hasInstance/ns0:linkKBCat ?catNr }
+    OPTIONAL { ?ts bf:hasInstance/ns0:circulationMin ?oplMin }
+    OPTIONAL { ?ts bf:hasInstance/ns0:circulationMax ?oplMax }
+    OPTIONAL { ?ts bf:hasInstance/bf:edition ?reprMeth }
     FILTER (STR(?winkelID) IN(%1%))
 }
