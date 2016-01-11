@@ -25,3 +25,7 @@ services:
     app.dao.kb:
         class    : AppBundle\Dao\Kb
         arguments: ["@sparql_client", "%query_path%", "@zend_cache"]
+    
+    app.service.preview:
+        class    : AppBundle\Service\Preview
+        arguments: ["@zend_cache"]
