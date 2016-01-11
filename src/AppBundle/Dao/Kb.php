@@ -135,7 +135,7 @@ class Kb
         $key  = sprintf('item_%s__args_%s', $item, sha1(implode('-', $arguments)));
 
         if (null == $this->cache) {
-            $data = $this->query($key, $arguments);
+            $data = $this->query($item, $arguments);
         } elseif (!$this->cache->hasItem($key)) {
             $data = $this->query($item, $arguments);
             $this->cache->setItem($key, serialize($data));
