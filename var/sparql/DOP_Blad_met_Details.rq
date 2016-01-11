@@ -29,5 +29,5 @@ WHERE {
     OPTIONAL { ?ts bf:frequency ?frequentie }
     OPTIONAL { ?ts ns0:winkelSummary/bf:annotationBody ?fullTxt }
     OPTIONAL { ?ts bf:hasInstance/ns0:linkKBCat ?catNr }
-    FILTER (STR(?winkelID) = %1%)
+    FILTER (STR(?winkelID) IN(%1%))
 }

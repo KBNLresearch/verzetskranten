@@ -39,7 +39,7 @@ class DefaultController extends Controller
         $pandoc = new Pandoc();
 
 
-        $result = $dao->dopBladMetDetails($winkelnr);
+        $result = $dao->dopBladMetDetails('"' . $winkelnr . '"');
         $count  = $result->numRows();
         if (0 == $count) {
             $msg = sprintf('Query for WinkelID %d yielded no results', $winkelnr);

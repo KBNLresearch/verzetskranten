@@ -132,7 +132,7 @@ class Kb
         }
 
         $data = null;
-        $key  = sprintf('item_%s__args_%s', $item, implode('-', $arguments));
+        $key  = sprintf('item_%s__args_%s', $item, sha1(implode('-', $arguments)));
 
         if (null == $this->cache) {
             $data = $this->query($key, $arguments);
@@ -159,7 +159,7 @@ class Kb
             $position = intval($matches[1], 10) - 1;
             $value    = $arguments[$position];
 
-            return is_numeric($value) ? $value : "'" . urlencode(addslashes($value)) . "'";
+            return $value;
         }, $this->queries[$item]);
 
         return $this->sparqlClient->query($sparql);
