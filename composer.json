@@ -30,7 +30,6 @@
         "easyrdf/easyrdf": "dev-master",
         "zendframework/zend-filter": "^2.5",
         "zendframework/zend-cache": "^2.5",
-        "ryakad/pandoc-php": "^1.0",
         "guzzlehttp/guzzle": "^6.1"
     },
     "require-dev": {

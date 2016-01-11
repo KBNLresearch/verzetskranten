@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "05355a999f45a7891a1304f677296319",
-    "content-hash": "c564902fd5b5f52cf7f182313c3f927e",
+    "hash": "f4fd5f0e71c91d0f68bbcaba70fcaf76",
+    "content-hash": "82e1737b9a83f58b8b46b1a98a9df5a6",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1349,32 +1349,6 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
-        },
-        {
-            "name": "ryakad/pandoc-php",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ryakad/pandoc-php.git",
-                "reference": "0cfdf959408e4c481db942b26785d94b9fe46672"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ryakad/pandoc-php/zipball/0cfdf959408e4c481db942b26785d94b9fe46672",
-                "reference": "0cfdf959408e4c481db942b26785d94b9fe46672",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Pandoc": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "time": "2015-01-07 05:07:16"
         },
         {
             "name": "sensio/distribution-bundle",

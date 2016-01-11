@@ -10,7 +10,6 @@ De tool is afhankelijk van de onderstaande software om te kunnen functioneren:
 
 - [PHP](http://php.net)
 - [composer](https://getcomposer.org)
-- [Pandoc](http://pandoc.org)
 - [Git](http://git-scm.com)
 
 ### PHP
@@ -19,9 +18,6 @@ compatibiliteits problemen te vermijden.
 
 ### composer
 Composer dient geinstalleerd te zijn. De meest recente versie kan hiervoor gebruikt worden.
-
-### Pandoc
-Tijdens ontwikkeling is versie 1.15.1 gebruikt. Dit dient minimaal versie 1.10 te zijn.
 
 ### Git
 Git dient geinstalleerd te zijn. De meest recente versie voor uw besturingssysteem kan hiervoor gebruikt worden.
