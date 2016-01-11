@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use GuzzleHttp\Client as HttpClient;
 use Pandoc\Pandoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -68,10 +69,22 @@ class DefaultController extends Controller
      */
     public function convertAction(Request $request)
     {
-        $pandoc = new Pandoc();
+        $wikiText   = $request->request->get('wikitext');
+        $httpClient = new HttpClient([
+            'base_uri' => 'http://nl.wikipedia.org',
+        ]);
 
-        $wikiText    = $request->request->get('wikitext');
-        $htmlPreview = $pandoc->convert($wikiText, 'mediawiki', 'html');
+        $response = $httpClient->post('w/api.php', [
+            'form_params' => [
+                'action'       => 'parse',
+                'format'       => 'json',
+                'prop'         => 'text',
+                'contentmodel' => 'wikitext',
+                'text'         => $wikiText
+            ]
+        ]);
+
+        $htmlPreview = json_decode($response->getBody())->parse->text->{'*'};
 
         $response = new Response();
         $response->setContent($htmlPreview);
