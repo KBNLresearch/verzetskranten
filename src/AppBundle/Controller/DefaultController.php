@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use GuzzleHttp\Client as HttpClient;
-use Pandoc\Pandoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,10 +33,9 @@ class DefaultController extends Controller
      */
     public function previewAction(Request $request, $winkelnr)
     {
-        $dao    = $this->get('app.dao.kb');
-        $twig   = $this->get('twig');
-        $pandoc = new Pandoc();
-
+        $dao     = $this->get('app.dao.kb');
+        $preview = $this->get('app.service.preview');
+        $twig    = $this->get('twig');
 
         $result = $dao->dopBladMetDetails('"' . $winkelnr . '"');
         $count  = $result->numRows();
@@ -54,7 +51,7 @@ class DefaultController extends Controller
             'blad' => $result[0],
         ]);
 
-        $htmlPreview = $pandoc->convert($wikiText, 'mediawiki', 'html');
+        $htmlPreview = $preview->preview($wikiText);
 
         return $this->render('default/preview.html.twig', [
             'wiki_text'    => $wikiText,
@@ -69,22 +66,9 @@ class DefaultController extends Controller
      */
     public function convertAction(Request $request)
     {
-        $wikiText   = $request->request->get('wikitext');
-        $httpClient = new HttpClient([
-            'base_uri' => 'http://nl.wikipedia.org',
-        ]);
-
-        $response = $httpClient->post('w/api.php', [
-            'form_params' => [
-                'action'       => 'parse',
-                'format'       => 'json',
-                'prop'         => 'text',
-                'contentmodel' => 'wikitext',
-                'text'         => $wikiText
-            ]
-        ]);
-
-        $htmlPreview = json_decode($response->getBody())->parse->text->{'*'};
+        $preview     = $this->get('app.service.preview');
+        $wikiText    = $request->request->get('wikitext');
+        $htmlPreview = $preview->preview($wikiText);
 
         $response = new Response();
         $response->setContent($htmlPreview);
