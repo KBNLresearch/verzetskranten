@@ -42,10 +42,10 @@ __NOTOC__
     {% set summary = summary ~ "'''#{blad.titel}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave} tot en met ${blad.tijdstipLaatseUitgave} " %}
+    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave} tot en met #{blad.tijdstipLaatseUitgave} " %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}
-    {%  set summary = summary ~ ",dat vanaf ${blad.tijdstipEersteUitgave} " %}
+    {%  set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave} " %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}
     {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave} " %}
