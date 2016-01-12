@@ -10,6 +10,8 @@ class Preview
     const BASE_URI = 'http://nl.wikipedia.org/';
     
     const API_PATH = 'w/api.php';
+    
+    const USER_AGENT = 'KoninklijkeBibliotheekVerzetskranten/1.0';
 
     /**
      * HTTP Client
@@ -88,6 +90,9 @@ class Preview
         if (null == $this->httpClient) {
             $this->httpClient = new HttpClient([
                 'base_uri' => self::BASE_URI,
+                'headers'  => [
+                    'User-Agent' => self::USER_AGENT,
+                ]
             ]);
         }
         
