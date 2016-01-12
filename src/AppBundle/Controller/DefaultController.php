@@ -29,7 +29,6 @@ class DefaultController extends Controller
      * @param  Request $request
      * @param  integer $winkelnr
      * @return Response
-     * @throws \Pandoc\PandocException
      */
     public function previewAction(Request $request, $winkelnr)
     {
