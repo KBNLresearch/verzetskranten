@@ -21,4 +21,3 @@ WHERE {
     FILTER(STR(?winkelID) = %1%)
 }
 ORDER BY ?winkelID 
-LIMIT 3

@@ -47,8 +47,11 @@ class DefaultController extends Controller
             throw new \LogicException($msg);
         }
 
+        $plaatsen = $dao->plaatsVanUitgave('"' . $winkelnr . '"');
+
         $wikiText = $twig->render('default/wiki.html.twig', [
             'blad' => $result[0],
+            'plaatsen' => $plaatsen,
         ]);
 
         $htmlPreview = $preview->preview($wikiText);

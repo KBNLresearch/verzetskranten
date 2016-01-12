@@ -50,14 +50,21 @@ __NOTOC__
 {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}
     {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave} " %}
 {% endif %}
-{% if blad.PlaatsUitgave is defined %}
+{% if plaatsen|length > 0 %}
     {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}
         {% set summary = summary ~ 'dat ' %}
     {% endif %}
-    {% set summary = summary ~ "in #{blad.PlaatsUitgave} " %}
-{% endif %}
-{% if blad.tijdstipEersteUitgave is defined or blad.tijdstipLaatseUitgave is defined or blad.PlaatsUitgave is defined %}
-    {% set summary = summary ~ 'werd uitgegeven' %}
+    {% set summary = summary ~ "in " %}
+    {% for plaats in plaatsen %}
+        {% if loop.first == true or loop.length == 1 %}
+            {% set summary = summary ~ plaats.PlaatsUitgave %}
+        {% elseif loop.last == true %}
+            {% set summary = summary ~ " en #{plaats.PlaatsUitgave}" %}
+        {%  else %}
+            {% set summary = summary ~ ", #{plaats.PlaatsUitgave}" %}
+        {% endif %}
+    {% endfor %}
+    {% set summary = summary ~ ' werd uitgegeven' %}
 {% endif %}
 {% set summary = summary ~ '.' %}
 {#Tweede zin#}
