@@ -11,10 +11,11 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?plts) AS ?PlaatsUitgave)
                 ?periodeVanVerschijnen
                 ?frequentie
-                (STR(?eerste) AS ?Eerste)
-                (STR(?laatste) AS ?Laatste)
-                ?oplMin ?oplMax
+                (STR(?eerste) AS ?tijdstipEersteUitgave)
+                (STR(?laatste) AS ?tijdstipLaatsteUitgave)
+                ?oplageMin ?oplageMax
                 ?inhCat
+                (REPlACE(STR(?inhCat), "http://almere.pilod.nl/LydiaWinkel/Categorie([A-Z]\\w+)$", "$1") AS ?inhoud)
                 ?reprMeth
                 ?delpherLink
                 ?fullTxt
@@ -36,8 +37,8 @@ WHERE {
     OPTIONAL { ?ts bf:serialLastIssue ?laatste }
     OPTIONAL { ?ts ns0:winkelSummary/bf:annotationBody ?fullTxt }
     OPTIONAL { ?ts bf:hasInstance/ns0:linkKBCat ?catNr }
-    OPTIONAL { ?ts bf:hasInstance/ns0:circulationMin ?oplMin }
-    OPTIONAL { ?ts bf:hasInstance/ns0:circulationMax ?oplMax }
+    OPTIONAL { ?ts bf:hasInstance/ns0:circulationMin ?oplageMin }
+    OPTIONAL { ?ts bf:hasInstance/ns0:circulationMax ?oplageMax }
     OPTIONAL { ?ts bf:hasInstance/bf:edition ?reprMeth }
     FILTER (STR(?winkelID) IN(%1%))
 }
