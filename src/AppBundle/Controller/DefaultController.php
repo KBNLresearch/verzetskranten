@@ -36,20 +36,17 @@ class DefaultController extends Controller
         $preview = $this->get('app.service.preview');
         $twig    = $this->get('twig');
 
-        $result = $dao->dopBladMetDetails('"' . $winkelnr . '"');
-        $count  = $result->numRows();
+        $bladen = $dao->dopBladMetDetails('"' . $winkelnr . '"');
+        $count  = $bladen->numRows();
         if (0 == $count) {
             $msg = sprintf('Query for WinkelID %d yielded no results', $winkelnr);
             throw new NotFoundHttpException($msg, null, 404);
-        } elseif (1 < $count) {
-            $msg = sprintf('Query for WinkelID %d yielded multiple results', $winkelnr);
-            throw new \LogicException($msg);
         }
 
         $plaatsen = $dao->plaatsVanUitgave('"' . $winkelnr . '"');
 
         $wikiText = $twig->render('default/wiki.html.twig', [
-            'blad' => $result[0],
+            'blad' => $bladen[0],
             'plaatsen' => $plaatsen,
         ]);
 
