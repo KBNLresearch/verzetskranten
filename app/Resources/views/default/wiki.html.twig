@@ -12,10 +12,10 @@ __NOTOC__
 | plaats van uitgave      = {{ blad.PlaatsUitgave|default('') }}
 | verspreidingsgebied     = Studenten/universitaire wereld, mn Leiden
 | verschijningsfrequentie = {{ blad.frequentie|default('') }}
-| inhoud                  = {{ blad.inhoud|default('') }}
+| inhoud                  = {{- blad.inhoud|default('')|preg_replace('/([A-Z])/', ' $1')|lower }}
 | doelgroep               = Studenten/universitaire wereld
-| reproductiemethode      = aanvankelijk gestencild, en vanaf november 1942 gedrukt
-| oplage                  = tussen de 250 en 8000
+| reproductiemethode      = {{ blad.reprMeth }}
+| oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('') }}
 | datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('') }}
 | formaat                 = 28cm
@@ -78,7 +78,7 @@ __NOTOC__
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
         {% if blad.oplageMin < blad.oplageMax %}
-            {% set summary = summary ~ " tussen de #{blad.oplageMin} en #{blad.oplageMin} exemplaren" %}
+            {% set summary = summary ~ " tussen de #{blad.oplageMin} en #{blad.oplageMax} exemplaren" %}
         {% endif %}
         {% if blad.oplageMin == blad.oplageMax %}
             {% set summary = summary ~ " van #{blad.oplageMin} exemplaren" %}
@@ -87,13 +87,13 @@ __NOTOC__
     {% set summary = summary ~ "." %}
 {% endif %}
 {#Derde zin#}
-{% if blad.vorm is defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " Het werd #{blad.vorm} en de inhoud bestond voornamelijk uit #{blad.inhoud}." %}
+{% if blad.reprMeth is defined and blad.inhoud is defined %}
+    {% set summary = summary ~ " Het werd #{blad.reprMeth} en de inhoud bestond voornamelijk uit #{blad.inhoud|preg_replace('/([A-Z])/', ' $1')|lower|trim}." %}
 {% endif %}
-{% if blad.vorm is defined and blad.inhoud is not defined %}
-    {% set summary = summary ~ " Het werd #{blad.vorm}." %}
+{% if blad.reprMeth is defined and blad.inhoud is not defined %}
+    {% set summary = summary ~ " Het werd #{blad.reprMeth}." %}
 {% endif %}
-{% if blad.vorm is not defined and blad.inhoud is defined %}
+{% if blad.reprMeth is not defined and blad.inhoud is defined %}
     {% set summary = summary ~ " De inhoud bestond voornamelijk uit #{blad.inhoud}." %}
 {% endif %}
 {% endspaceless %}
