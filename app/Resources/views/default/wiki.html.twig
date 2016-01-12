@@ -16,8 +16,8 @@ __NOTOC__
 | doelgroep               = Studenten/universitaire wereld
 | reproductiemethode      = {{ blad.reprMeth }}
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
-| datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('') }}
-| datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('') }}
+| datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('')|date('d-m-Y') }}
+| datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('')|date('d-m-Y') }}
 | formaat                 = 28cm
 | taal                    = Nederland
 | vervaardigers           = [[Jan Drion]] en [[Huib Drion]]
@@ -42,13 +42,13 @@ __NOTOC__
     {% set summary = summary ~ "'''#{blad.titel}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave} tot en met #{blad.tijdstipLaatseUitgave} " %}
+    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|date('d-m-Y')} tot en met #{blad.tijdstipLaatseUitgave|date('d-m-Y')} " %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}
-    {%  set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave} " %}
+    {%  set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|date('d-m-Y')} " %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave} " %}
+    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave|date('d-m-Y')} " %}
 {% endif %}
 {% if plaatsen|length > 0 %}
     {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}
