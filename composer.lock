@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f4fd5f0e71c91d0f68bbcaba70fcaf76",
-    "content-hash": "82e1737b9a83f58b8b46b1a98a9df5a6",
+    "hash": "e77f7a32edf8b1d48e025a5d22fe23ed",
+    "content-hash": "bbdd01dd8a16c723f277adf16823fafe",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1087,6 +1087,60 @@
                 "parameters management"
             ],
             "time": "2015-11-10 17:04:01"
+        },
+        {
+            "name": "jasny/twig-extensions",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jasny/twig-extensions.git",
+                "reference": "17df9aab8bd0afc503d044d0e9c241c74b407a4d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jasny/twig-extensions/zipball/17df9aab8bd0afc503d044d0e9c241c74b407a4d",
+                "reference": "17df9aab8bd0afc503d044d0e9c241c74b407a4d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "twig/twig": "1.*"
+            },
+            "suggest": {
+                "ext-intl": "Required for the use of the LocalDate Twig extension",
+                "ext-pcre": "Required for the use of the PCRE Twig extension"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Jasny\\Twig": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arnold Daniels",
+                    "email": "arnold@jasny.net",
+                    "homepage": "http://www.jasny.net"
+                }
+            ],
+            "description": "A set of useful Twig filters",
+            "homepage": "http://github.com/jasny/twig-extensions#README",
+            "keywords": [
+                "PCRE",
+                "array",
+                "date",
+                "datetime",
+                "preg",
+                "regex",
+                "templating",
+                "text",
+                "time"
+            ],
+            "time": "2015-12-09 03:46:22"
         },
         {
             "name": "jdorn/sql-formatter",

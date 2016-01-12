@@ -30,7 +30,8 @@
         "easyrdf/easyrdf": "dev-master",
         "zendframework/zend-filter": "^2.5",
         "zendframework/zend-cache": "^2.5",
-        "guzzlehttp/guzzle": "^6.1"
+        "guzzlehttp/guzzle": "^6.1",
+        "jasny/twig-extensions": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
