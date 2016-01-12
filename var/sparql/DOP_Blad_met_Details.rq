@@ -5,6 +5,7 @@ PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
+                (STR(?uniekeTitelVoorWP) AS ?titelWP)
                 (STR(?titel) AS ?titel)
                 (STR(?ppnF) AS ?PPNFysiek)
                 (STR(?ppnD) AS ?PPNDigitaal)
