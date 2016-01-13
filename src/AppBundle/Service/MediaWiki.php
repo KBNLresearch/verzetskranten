@@ -99,11 +99,11 @@ class MediaWiki
         $key  = 'preview_' . sha1($wikiText);
         
         if (!$this->cache) {
-            $data = $this->getData($wikiText);
+            $data = $this->getPreview($wikiText);
         } elseif ($this->cache->hasItem($key)) {
             $data = $this->cache->getItem($key);
         } else {
-            $data = $this->getData($wikiText);
+            $data = $this->getPreview($wikiText);
             $this->cache->setItem($key, $data);
         }
         
@@ -114,7 +114,7 @@ class MediaWiki
      * @param  $wikiText
      * @return string|null
      */
-    private function getData($wikiText)
+    private function getPreview($wikiText)
     {
         $httpClient = $this->getHttpClient();
         $response   = $httpClient->post(self::API_PATH, [
