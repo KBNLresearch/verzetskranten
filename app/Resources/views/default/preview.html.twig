@@ -56,7 +56,7 @@
         colHtml = $('#collapse-html');
 
     var onBtnConvertClick = function () {
-        $.ajax('{{ path('convert_wiki') }}', {
+        $.ajax('{{ path('wiki_convert') }}', {
             method : 'POST',
             success: onConvertSuccess,
             data   : {

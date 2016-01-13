@@ -127,7 +127,7 @@
     var onBtnLoginClick = function (evt) {
         evt.preventDefault();
 
-        $.ajax('/login-wiki', {
+        $.ajax('{{ path('wiki_login') }}', {
             method : 'POST',
             success: onLoginSuccess,
             data   : {
@@ -140,7 +140,7 @@
     var onBtnLogoutClick = function (evt) {
         evt.preventDefault();
 
-        $.ajax('/logout-wiki', {
+        $.ajax('{{ path('wiki_logout') }}', {
             method : 'POST',
             success: onLogoutSuccess
         });
