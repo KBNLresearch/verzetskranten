@@ -69,15 +69,15 @@ class DefaultController extends Controller
         $wikiText    = $request->request->get('wikitext');
         $htmlPreview = $mediawiki->preview($wikiText);
 
-        $response = new Response();
-        $response->setContent($htmlPreview);
-
-        return $response;
+        return Response::create($htmlPreview, 200, [
+            'Content-Type' => 'text/html',
+        ]);
     }
 
     /**
      * @Route("/download-wiki", name="download_wiki")
      * @param  Request $request
+     * @return Response
      * @throws \Exception
      */
     public function downloadAction(Request $request)
@@ -140,10 +140,10 @@ class DefaultController extends Controller
             throw new \Exception($msg);
         }
 
-        Response::create(file_get_contents($archiveName), 200, [
+        return Response::create(file_get_contents($archiveName), 200, [
             'Content-Type'              => 'application/zip',
             'Content-Transfer-Encoding' => 'Binary',
             'Content-Disposition'       => 'attachment; filename="' . basename($archiveName) . '"',
-        ])->send();
+        ]);
     }
 }
