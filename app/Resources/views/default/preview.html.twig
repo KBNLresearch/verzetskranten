@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<nav class="navbar navbar-default">
+    <a href="{{ path('homepage') }}" class="btn navbar-btn">Back to Overview</a>
+</nav>
+
 <div id="accordion" class="panel-group" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="heading-wiki">
