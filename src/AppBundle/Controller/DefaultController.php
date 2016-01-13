@@ -32,9 +32,9 @@ class DefaultController extends Controller
      */
     public function previewAction(Request $request, $winkelnr)
     {
-        $dao     = $this->get('app.dao.kb');
-        $preview = $this->get('app.service.preview');
-        $twig    = $this->get('twig');
+        $dao       = $this->get('app.dao.kb');
+        $mediawiki = $this->get('app.service.mediawiki');
+        $twig      = $this->get('twig');
 
         $bladen = $dao->dopBladMetDetails('"' . $winkelnr . '"');
         $count  = $bladen->numRows();
@@ -50,7 +50,7 @@ class DefaultController extends Controller
             'plaatsen' => $plaatsen,
         ]);
 
-        $htmlPreview = $preview->preview($wikiText);
+        $htmlPreview = $mediawiki->preview($wikiText);
 
         return $this->render('default/preview.html.twig', [
             'wiki_text'    => $wikiText,
@@ -65,9 +65,9 @@ class DefaultController extends Controller
      */
     public function convertAction(Request $request)
     {
-        $preview     = $this->get('app.service.preview');
+        $mediawiki   = $this->get('app.service.mediawiki');
         $wikiText    = $request->request->get('wikitext');
-        $htmlPreview = $preview->preview($wikiText);
+        $htmlPreview = $mediawiki->preview($wikiText);
 
         $response = new Response();
         $response->setContent($htmlPreview);

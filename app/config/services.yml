@@ -26,8 +26,8 @@ services:
         class    : AppBundle\Dao\Kb
         arguments: ["@sparql_client", "%query_path%", "@zend_cache"]
     
-    app.service.preview:
-        class    : AppBundle\Service\Preview
+    app.service.mediawiki:
+        class    : AppBundle\Service\MediaWiki
         arguments: ["@zend_cache"]
 
     twig.extension.pcre:

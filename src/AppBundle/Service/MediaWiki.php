@@ -5,7 +5,7 @@ namespace AppBundle\Service;
 use GuzzleHttp\Client as HttpClient;
 use Zend\Cache\Storage\StorageInterface;
 
-class Preview
+class MediaWiki
 {
     const BASE_URI = 'http://nl.wikipedia.org/';
     
@@ -32,6 +32,15 @@ class Preview
     public function __construct(StorageInterface $cache = null)
     {
         $this->cache = $cache;
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     */
+    public function login($username, $password)
+    {
+        
     }
 
     /**
