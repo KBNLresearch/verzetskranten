@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
@@ -19,8 +20,11 @@ class DefaultController extends Controller
     {
         $dao = $this->get('app.dao.kb');
 
+        $session = new Session();
+
         return $this->render('default/index.html.twig', [
-            'dao' => $dao,
+            'dao'   => $dao,
+            'login' => $session->get('login'),
         ]);
     }
 
@@ -144,6 +148,52 @@ class DefaultController extends Controller
             'Content-Type'              => 'application/zip',
             'Content-Transfer-Encoding' => 'Binary',
             'Content-Disposition'       => 'attachment; filename="' . basename($archiveName) . '"',
+        ]);
+    }
+
+    /**
+     * @Route("/login-wiki", name="login_wiki")
+     * @param  Request $request
+     * @return Response
+     */
+    public function loginAction(Request $request)
+    {
+        $mediawiki = $this->get('app.service.mediawiki');
+
+        $session = new Session();
+
+        $result = $mediawiki->login($request->request->get('username'), $request->request->get('password'));
+        $body   = (null != $result)
+            ? ['success' => true, 'userid' => $result->lguserid, 'username' => $result->lgusername]
+            : ['success' => false];
+
+        $session->set('login', $body);
+
+        return Response::create(json_encode($body), 200, [
+            'Content-Type' => 'application/json',
+        ]);
+    }
+
+    /**
+     * @Route("/logout-wiki", name="logout_wiki")
+     * @param  Request $request
+     * @return Response
+     */
+    public function logoutAction(Request $request)
+    {
+        $mediawiki = $this->get('app.service.mediawiki');
+
+        $session = new Session();
+
+        $success = $mediawiki->logout();
+        if (true == $success) {
+            $session->remove('login');
+        }
+
+        $body = ['success' => $success];
+
+        return Response::create(json_encode($body), 200, [
+            'Content-Type' => 'application/json',
         ]);
     }
 }

@@ -14,6 +14,17 @@
         <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
         Export
     </a>
+    <div id="info-login" class="pull-left" {% if login.username is not defined %}style="display: none;"{% endif %}>
+        <p class="navbar-text">Signed in as <span id="info-username">{{ login.username|default('Guest') }}</span></p>
+        <button id="btn-logout" type="submit" class="btn btn-default">Logout</button>
+    </div>
+    <form id="form-login" class="navbar-form navbar-left" {% if login.username is defined %}style="display: none;"{% endif %}>
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Username">
+            <input type="password" class="form-control" name="password" placeholder="Password">
+        </div>
+        <button id="btn-login" type="submit" class="btn btn-default">Login</button>
+    </form>
 </div>
 
 <table>
@@ -49,6 +60,11 @@
         btnPreview  = $('#btn-preview'),
         btnDownload = $('#btn-download'),
         btnExport   = $('#btn-export'),
+        btnLogin    = $('#btn-login'),
+        btnLogout   = $('#btn-logout'),
+        infoLogin   = $('#info-login'),
+        infoUser    = $('#info-username'),
+        formLogin   = $('#form-login'),
         bsTable     = $('table');
 
     var warn = function (msg, target) {
@@ -62,6 +78,23 @@
             </div>`;
 
         $(target).prepend(html);
+    };
+
+    var onLoginSuccess = function (res) {
+        if (true == res.success) {
+            infoUser.html(res.username);
+            infoLogin.show();
+            formLogin.hide();
+        }
+    };
+
+    var onLogoutSuccess = function (res) {
+        if (true == res.success) {
+            formLogin[0].reset();
+            formLogin.show();
+            infoUser.html('');
+            infoLogin.hide();
+        }
     };
 
     var onBtnPreviewClick = function () {
@@ -91,6 +124,28 @@
         btnExport.toggleClass('disabled', false);
     };
 
+    var onBtnLoginClick = function (evt) {
+        evt.preventDefault();
+
+        $.ajax('/login-wiki', {
+            method : 'POST',
+            success: onLoginSuccess,
+            data   : {
+                username: $('input[name=username]').val(),
+                password: $('input[name=password]').val()
+            }
+        });
+    };
+
+    var onBtnLogoutClick = function (evt) {
+        evt.preventDefault();
+
+        $.ajax('/logout-wiki', {
+            method : 'POST',
+            success: onLogoutSuccess
+        });
+    };
+
     var onBsTableUnCheck = function () {
         var selection = bsTable.bootstrapTable('getSelections');
 
@@ -102,6 +157,8 @@
     btnPreview.on('click', onBtnPreviewClick);
     btnDownload.on('click', onBtnDownloadClick);
     btnExport.on('click', onBtnExportClick);
+    btnLogin.on('click', onBtnLoginClick);
+    btnLogout.on('click', onBtnLogoutClick);
 
     bsTable.bootstrapTable({
         // options
