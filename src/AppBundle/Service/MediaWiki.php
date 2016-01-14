@@ -14,6 +14,8 @@ class MediaWiki
     const API_PATH = 'w/api.php';
     
     const USER_AGENT = 'KoninklijkeBibliotheekVerzetskranten/1.0';
+    
+    const WIKI_NAMESPACE = 'Wikipedia:Wikiproject/Verzetskranten/Beginnetjes/';
 
     /**
      * HTTP Client
@@ -139,7 +141,7 @@ class MediaWiki
                 'prop'         => 'text',
                 'contentmodel' => 'wikitext',
                 'token'        => $token,
-                'title'        => $title,
+                'title'        => self::WIKI_NAMESPACE . $title,
                 'text'         => $wikiText,
             ]
         ]);
