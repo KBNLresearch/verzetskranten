@@ -14,6 +14,10 @@
         <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
         Export
     </a>
+    <a id="btn-nuke" role="button" class="btn btn-default navbar-btn" title="Nuke Application Cache!">
+        <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+        Kaboom!
+    </a>
     <div id="info-login" class="pull-left" {% if login.username is not defined %}style="display: none;"{% endif %}>
         <p class="navbar-text">Signed in as <span id="info-username">{{ login.username|default('Guest') }}</span></p>
         <button id="btn-logout" type="submit" class="btn btn-default">Logout</button>
@@ -60,6 +64,7 @@
         btnPreview  = $('#btn-preview'),
         btnDownload = $('#btn-download'),
         btnExport   = $('#btn-export'),
+        btnNuke     = $('#btn-nuke'),
         btnLogin    = $('#btn-login'),
         btnLogout   = $('#btn-logout'),
         infoLogin   = $('#info-login'),
@@ -116,6 +121,14 @@
         fn(res.message, wrapper);
     };
 
+    var onNukeSuccess = function (res) {
+        if (res.success) {
+            success('Cache cleared', wrapper);
+        } else  {
+            warn('Failed to clear cache', wrapper);
+        }
+    };
+
     var onBtnPreviewClick = function () {
         var row = bsTable.bootstrapTable('getSelections')[0],
             wid = row.id;
@@ -146,6 +159,17 @@
             data   : {
                 ids: JSON.stringify(ids)
             }
+        });
+    };
+
+    var onBtnNukeClick = function () {
+        if (!window.confirm('Are you sure you want to clear all the cached items?')) {
+            return;
+        }
+
+        $.ajax('{{ path('nuke_cache') }}', {
+            method : 'POST',
+            success: onNukeSuccess
         });
     };
 
@@ -190,6 +214,7 @@
     btnPreview.on('click', onBtnPreviewClick);
     btnDownload.on('click', onBtnDownloadClick);
     btnExport.on('click', onBtnExportClick);
+    btnNuke.on('click', onBtnNukeClick);
     btnLogin.on('click', onBtnLoginClick);
     btnLogout.on('click', onBtnLogoutClick);
 

@@ -65,4 +65,23 @@ class DefaultController extends Controller
             'html_preview' => $htmlPreview,
         ]);
     }
+
+    /**
+     * @Route("/nuke-cache", name="nuke_cache")
+     */
+    public function nukeCacheAction()
+    {
+        $cache = $this->get('zend_cache');
+
+        try {
+            $success = $cache->flush();
+        } catch (\Exception $e) {
+            $success = false;
+        }
+
+        $body = ['success' => $success];
+        return Response::create(json_encode($body), 200, [
+            'Content-Type' => 'application/json',
+        ]);
+    }
 }
