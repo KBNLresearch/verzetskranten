@@ -78,11 +78,14 @@ class WikiController extends Controller
 
         $results = $dao->dopBladMetDetails($arg);
         foreach($results as $result) {
+            $plaatsen = $dao->plaatsVanUitgave('"' . $result->WinkelNr . '"');
+            $contents = $twig->render('default/wiki.html.twig', [
+                'blad'     => $result,
+                'plaatsen' => $plaatsen,
+            ]);
+
             $fileSystemSafeTitle = strtolower(preg_replace('/[^a-z-0-9\-\_]/i', '-', $result->titel));
             $filename            = sprintf('%s-%s.wiki', $result->WinkelNr, $fileSystemSafeTitle);
-            $contents            = $twig->render('default/wiki.html.twig', [
-                'blad' => $result,
-            ]);
 
             $zipArchive->addFromString($filename, $contents);
         }

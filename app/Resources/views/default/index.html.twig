@@ -109,7 +109,7 @@
             return row.id;
         });
 
-        window.location = '/download-wiki?ids=' + JSON.stringify(ids);
+        window.location = '{{ path('wiki_download') }}?ids=' + JSON.stringify(ids);
     };
 
     var onBtnExportClick = function () {
