@@ -9,7 +9,7 @@ use EasyRdf\Sparql\Client as SparqlClient,
     Zend\Filter\Word as WordFilter,
     Zend\Filter\FilterChain;
 
-class Kb
+class Dop
 {
     /**
      * SparQL client

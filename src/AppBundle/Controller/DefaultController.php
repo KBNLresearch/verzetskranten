@@ -18,7 +18,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $dao = $this->get('app.dao.kb');
+        $dao = $this->get('app.dao.dop');
 
         $session = new Session();
 
@@ -36,7 +36,7 @@ class DefaultController extends Controller
      */
     public function previewAction(Request $request, $winkelnr)
     {
-        $dao       = $this->get('app.dao.kb');
+        $dao       = $this->get('app.dao.dop');
         $mediawiki = $this->get('app.service.mediawiki');
         $twig      = $this->get('twig');
 

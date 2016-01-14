@@ -22,8 +22,8 @@ services:
         factory  : [Zend\Cache\StorageFactory, factory]
         arguments: ["%cache%"]
 
-    app.dao.kb:
-        class    : AppBundle\Dao\Kb
+    app.dao.dop:
+        class    : AppBundle\Dao\Dop
         arguments: ["@sparql_client", "%query_path%", "@zend_cache"]
     
     app.service.mediawiki:

@@ -34,7 +34,7 @@ class WikiController extends Controller
      */
     public function downloadAction(Request $request)
     {
-        $dao         = $this->get('app.dao.kb');
+        $dao         = $this->get('app.dao.dop');
         $twig        = $this->get('twig');
 
         $winkelNrs   = json_decode($request->get('ids', '[]'));
@@ -159,7 +159,7 @@ class WikiController extends Controller
      */
     public function editAction(Request $request)
     {
-        $dao       = $this->get('app.dao.kb');
+        $dao       = $this->get('app.dao.dop');
         $twig      = $this->get('twig');
         $winkelNrs = json_decode($request->get('ids', '[]'));
         $mediawiki = $this->get('app.service.mediawiki');
