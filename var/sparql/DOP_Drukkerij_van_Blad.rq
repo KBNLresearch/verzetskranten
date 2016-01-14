@@ -16,7 +16,7 @@ WHERE {
     ?subj rdf:type ?klasse .
     ?subj rdfs:label ?ond .
     OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
-    FILTER (?klasse IN (foaf:Person))
+    FILTER (?klasse IN (dbo:Company))
     FILTER(STR(?winkelID) = %1%)
 }
 ORDER BY ?winkelID

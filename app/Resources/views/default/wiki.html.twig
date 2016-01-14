@@ -10,19 +10,19 @@ __NOTOC__
 | ondertitel              = dummy
 | motto                   = dummy
 | plaats van uitgave      = {{ blad.PlaatsUitgave|default('') }}
-| verspreidingsgebied     = Studenten/universitaire wereld, mn Leiden
+| verspreidingsgebied     = dummy
 | verschijningsfrequentie = {{ blad.frequentie|default('') }}
 | inhoud                  = {{- blad.inhoud|default('')|preg_replace('/([A-Z])/', ' $1')|lower }}
-| doelgroep               = Studenten/universitaire wereld
+| doelgroep               = dummy
 | reproductiemethode      = {{ blad.reprMeth }}
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('')|date('d-m-Y') }}
 | datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('')|date('d-m-Y') }}
-| formaat                 = 28cm
+| formaat                 = dummy
 | taal                    = Nederland
-| vervaardigers           = [[Jan Drion]] en [[Huib Drion]]
+| vervaardigers           = {% for persoon in personen %}[[{{ persoon.naam }}]] {% endfor %}
 | uitgevers               = dummy
-| drukkers                = dummy
+| drukkers                = {% for drukker in drukkers %}[[{{ drukker.naam }}]] {% endfor %}
 | andere betrokkenen      = dummy
 | gerelateerd             = [[Cereales vadenses (verzetsblad, Wageningen)|Cereales vadenses]], [[De Leidsche brief (verzetsblad, Leiden)|De Leidsche brief]], [[Sol justitiae: het Utrechts studentenblad (verzetsblad, Utrecht)|Sol justitiae: het Utrechts studentenblad ]]
 | opvolger van            = dummy
@@ -107,7 +107,9 @@ __NOTOC__
 {{ summary|raw }}
 
 == Bij deze krant betrokken personen ==
-
+{% for persoon in personen %}
+* [[{{ persoon.naam }}]]
+{% endfor %}
 
 == Gerelateerde kranten ==
 
