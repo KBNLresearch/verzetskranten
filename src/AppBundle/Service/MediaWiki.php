@@ -40,7 +40,8 @@ class MediaWiki
      * @param  string $username
      * @param  string $password
      * @param  string $token
-     * @return \StdClass|null
+     * @return null|\StdClass
+     * @throws \Exception
      */
     public function login($username, $password, $token = null)
     {
@@ -56,7 +57,7 @@ class MediaWiki
         ]);
 
         if (200 != $response->getStatusCode()) {
-            return false;
+            throw new \Exception("Requested failed");
         }
 
         $body  = json_decode($response->getBody());
