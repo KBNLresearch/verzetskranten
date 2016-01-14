@@ -147,4 +147,60 @@ class WikiController extends Controller
             'Content-Type' => 'application/json',
         ]);
     }
+
+    /**
+     * @Route("/wiki/edit", name="wiki_edit")
+     * @param  Request $request
+     * @return Response
+     */
+    public function editAction(Request $request)
+    {
+        $dao       = $this->get('app.dao.kb');
+        $twig      = $this->get('twig');
+        $winkelNrs = json_decode($request->get('ids', '[]'));
+        $mediawiki = $this->get('app.service.mediawiki');
+        $session   = new Session();
+
+        $success = false;
+        $message = null;
+
+        try {
+            // check login
+            $login = $session->get('login');
+            if (null == $login || !property_exists($login, 'userid')) {
+                throw new \Exception('Not logged in');
+            }
+
+            // get edit token if not already present
+            if (null == ($token = $session->get('edittoken', null))) {
+                $token = $mediawiki->token('edittoken');
+            }
+
+            // query all the selected bladen
+            $arg = implode(',', array_map(function($winkelNr) {
+                return sprintf('"%s"', $winkelNr);
+            }, $winkelNrs));
+
+            $results = $dao->dopBladMetDetails($arg);
+            foreach($results as $result) {
+                $plaatsen = $dao->plaatsVanUitgave('"' . $result->WinkelNr . '"');
+                $wikitext = $twig->render('default/wiki.html.twig', [
+                    'blad' => $result,
+                ]);
+
+                // post to wikipedia
+                $mediawiki->edit($token, $result->titelWP, $wikitext);
+            }
+
+            $success = true;
+            $message = 'All selected lemmas exported successfully';
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        $body = ['success' => $success, 'message' => $message];
+        return Response::create(json_encode($body), 200, [
+            'Content-Type' => 'application/json',
+        ]);
+    }
 }

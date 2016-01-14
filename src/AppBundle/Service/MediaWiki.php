@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Enum\EditResult;
 use AppBundle\Enum\LoginResult;
 use GuzzleHttp\Client as HttpClient;
 use Zend\Cache\Storage\StorageInterface;
@@ -86,7 +87,71 @@ class MediaWiki
             ]
         ]);
 
-        return  (200 == $response->getStatusCode());
+        return (200 == $response->getStatusCode());
+    }
+
+    /**
+     * @param  $type
+     * @return mixed
+     * @throws \Exception
+     */
+    public function token($type)
+    {
+        $httpClient = $this->getHttpClient();
+        $response   = $httpClient->get(self::API_PATH, [
+            'query' => [
+                'action' => 'query',
+                'prop'   => 'info',
+                'meta'   => 'tokens',
+                'format' => 'json',
+            ]
+        ]);
+
+        if (200 != $response->getStatusCode()) {
+            throw new \Exception("Requested failed");
+        }
+
+        $body   = json_decode($response->getBody());
+        $tokens = $body->query->tokens;
+
+        if (!property_exists($tokens, $type)) {
+            $msg = sprintf("Requested token type '%s' was not present in the response", $type);
+            throw new \Exception($msg);
+        }
+
+        return $tokens->{$type};
+    }
+
+    /**
+     * @param  $token
+     * @param  $title
+     * @param  $wikiText
+     * @throws \Exception
+     */
+    public function edit($token, $title, $wikiText)
+    {
+        $httpClient = $this->getHttpClient();
+        $response   = $httpClient->post(self::API_PATH, [
+            'form_params' => [
+                'action'       => 'edit',
+                'format'       => 'json',
+                'prop'         => 'text',
+                'contentmodel' => 'wikitext',
+                'token'        => $token,
+                'title'        => $title,
+                'text'         => $wikiText,
+            ]
+        ]);
+
+        if (200 != $response->getStatusCode()) {
+            throw new \Exception("Requested failed");
+        }
+
+        $body = json_decode($response->getBody());
+        if (EditResult::SUCCESS != $body->edit->result) {
+            $error = $body->error;
+            throw new \Exception($error->info, $error->code);
+        }
     }
 
     /**
