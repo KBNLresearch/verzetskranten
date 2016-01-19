@@ -6,32 +6,32 @@ __NOTOC__
 {% verbatim %}{{Infobox illegaal blad{% endverbatim %}
 | titel                   = {{ blad.titel }}
 | afbeelding              = 
-| onderschrift            = dummy
-| ondertitel              = dummy
-| motto                   = dummy
+| onderschrift            = 
+| ondertitel              = 
+| motto                   = 
 | plaats van uitgave      = {{ blad.PlaatsUitgave|default('') }}
-| verspreidingsgebied     = dummy
+| verspreidingsgebied     = 
 | verschijningsfrequentie = {{ blad.frequentie|default('') }}
 | inhoud                  = {{- blad.inhoud|default('')|preg_replace('/([A-Z])/', ' $1')|lower }}
-| doelgroep               = dummy
+| doelgroep               = 
 | reproductiemethode      = {{ blad.reprMeth }}
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('')|date('d-m-Y') }}
 | datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('')|date('d-m-Y') }}
-| formaat                 = dummy
+| formaat                 = 
 | taal                    = Nederland
 | vervaardigers           = {% for persoon in personen %}[[{{ persoon.naam }}]] {% endfor %}
-| uitgevers               = dummy
+| uitgevers               = 
 | drukkers                = {% for drukker in drukkers %}[[{{ drukker.naam }}]] {% endfor %}
-| andere betrokkenen      = dummy
-| gerelateerd             = [[Cereales vadenses (verzetsblad, Wageningen)|Cereales vadenses]], [[De Leidsche brief (verzetsblad, Leiden)|De Leidsche brief]], [[Sol justitiae: het Utrechts studentenblad (verzetsblad, Utrecht)|Sol justitiae: het Utrechts studentenblad ]]
-| opvolger van            = dummy
-| voorloper van           = dummy
-| legaal voortgezet       = dummy
+| andere betrokkenen      = 
+| gerelateerd             = 
+| opvolger van            = 
+| voorloper van           = 
+| legaal voortgezet       = 
 | winkelID                = {{ blad.WinkelNr }}
 | PPN                     = {{ blad.PPNFysiek|default('') }}
-| website                 = dummy
-| portaal2                = dummy
+| website                 = 
+| portaal2                = 
 {% verbatim %}}}{% endverbatim %}
 
 {#Use string concatenation for better whitespace control#}
