@@ -16,8 +16,8 @@ __NOTOC__
 | doelgroep               = 
 | reproductiemethode      = {{ blad.reprMeth }}
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
-| datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('')|date('d-m-Y') }}
-| datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('')|date('d-m-Y') }}
+| datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}
+| datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('')|localdate('long') }}
 | formaat                 = 
 | taal                    = Nederland
 | vervaardigers           = {% for persoon in personen %}[[{{ persoon.naam }}]] {% endfor %}
@@ -42,13 +42,13 @@ __NOTOC__
     {% set summary = summary ~ "'''#{blad.titel}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|date('d-m-Y')} tot en met #{blad.tijdstipLaatseUitgave|date('d-m-Y')} " %}
+    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} tot en met #{blad.tijdstipLaatseUitgave|localdate('long')} " %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}
-    {%  set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|date('d-m-Y')} " %}
+    {%  set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} " %}
 {% endif %}
 {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave|date('d-m-Y')} " %}
+    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave|localdate('long')} " %}
 {% endif %}
 {% if plaatsen|length > 0 %}
     {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}
