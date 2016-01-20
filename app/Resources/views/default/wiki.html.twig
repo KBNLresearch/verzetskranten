@@ -16,8 +16,8 @@ __NOTOC__
 | doelgroep               = 
 | reproductiemethode      = {{ blad.reprMeth|capitalize }}
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}Tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
-| datum eerste uitgave    = {{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}
-| datum laatste uitgave   = {{ blad.tijdstipLaatseUitgave|default('')|localdate('long') }}
+| datum eerste uitgave    = {% if blad.tijdstipEersteUitgave is defined %}{{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}{% endif %} 
+| datum laatste uitgave   = {% if blad.tijdstipLaatsteUitgave is defined %}{{ blad.tijdstipLaatsteUitgave|default('')|localdate('long') }}{% endif %} 
 | formaat                 = 
 | taal                    = Nederland
 | vervaardigers           = {% for persoon in personen %}[[{{ persoon.naam }}]] {% endfor %} 
@@ -41,17 +41,17 @@ __NOTOC__
 {% if 'Ongetiteld verzetsblad' != blad.titel %}
     {% set summary = summary ~ "'''#{blad.titel}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
 {% endif %}
-{% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} tot en met #{blad.tijdstipLaatseUitgave|localdate('long')} " %}
+{% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatsteUitgave is defined %}
+    {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} tot en met #{blad.tijdstipLaatsteUitgave|localdate('long')} " %}
 {% endif %}
-{% if blad.tijdstipEersteUitgave is defined and blad.tijdstiplaatsetUitgave is not defined %}
+{% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatsteUitgave is not defined %}
     {%  set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} " %}
 {% endif %}
-{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is defined %}
-    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatseUitgave|localdate('long')} " %}
+{% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatsteUitgave is defined %}
+    {% set summary = summary ~ ", dat tot en met #{blad.tijdstipLaatsteUitgave|localdate('long')} " %}
 {% endif %}
 {% if plaatsen|length > 0 %}
-    {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatseUitgave is not defined %}
+    {% if blad.tijdstipEersteUitgave is not defined and blad.tijdstipLaatsteUitgave is not defined %}
         {% set summary = summary ~ 'dat ' %}
     {% endif %}
     {% set summary = summary ~ "in " %}
