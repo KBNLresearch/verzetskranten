@@ -3,6 +3,7 @@
 parameters:
     sparql_endpoint: http://almere.pilod.nl/sparql
     query_path     : "%kernel.root_dir%/../var/sparql"
+    certs_path     : "%kernel.root_dir%/../var/certs/cacert.pem"
 
     cache:
         adapter:
@@ -28,7 +29,7 @@ services:
     
     app.service.mediawiki:
         class    : AppBundle\Service\MediaWiki
-        arguments: ["@zend_cache"]
+        arguments: ["%certs_path%", "@zend_cache"]
 
     twig.extension.pcre:
         class: Jasny\Twig\PcreExtension

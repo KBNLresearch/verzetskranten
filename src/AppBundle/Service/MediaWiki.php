@@ -30,12 +30,20 @@ class MediaWiki
     private $cache;
 
     /**
+     * Path to certificates
+     * @var string
+     */
+    private $certsPath;
+
+    /**
      * Preview constructor.
+     * @param string           $certsPath
      * @param StorageInterface $cache
      */
-    public function __construct(StorageInterface $cache = null)
+    public function __construct($certsPath, StorageInterface $cache = null)
     {
         $this->cache = $cache;
+        $this->certsPath = $certsPath;
     }
 
     /**
@@ -214,6 +222,7 @@ class MediaWiki
             $this->httpClient = new HttpClient([
                 'base_uri' => self::BASE_URI,
                 'cookies'  => true,
+                'verify'   => $this->certsPath,
                 'headers'  => [
                     'User-Agent' => self::USER_AGENT,
                 ]
