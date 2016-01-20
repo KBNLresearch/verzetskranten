@@ -65,7 +65,7 @@ class WikiController extends Controller
             \ZipArchive::ER_DELETED     => 'Entry has been deleted',
         ];
 
-        $archiveName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'wikis-' . time() . '.zip';
+        $archiveName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'wikis-' . date('d-m-Y-H-i-s') . '.zip';
         $opened      = $zipArchive->open($archiveName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE | \ZipArchive::CHECKCONS);
         if (true !== $opened) {
             $msg = sprintf("Failed to create zip archive. %s", $zipErrorMap[$opened]);
