@@ -103,6 +103,8 @@
             infoUser.html(res.username);
             infoLogin.show();
             formLogin.hide();
+        } else {
+            warn(res.message, wrapper);
         }
     };
 

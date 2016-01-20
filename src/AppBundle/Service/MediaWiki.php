@@ -79,11 +79,20 @@ class MediaWiki
                 break;
 
             case LoginResult::SUCCESS:
-                return $login;
+                return [
+                    'success'  => true,
+                    'userid'   => $login->lguserid,
+                    'username' => $login->lgusername,
+                ];
+                break;
+
+            default:
+                return [
+                    'success' => false,
+                    'message' => LoginResult::messageFor($login->result),
+                ];
                 break;
         }
-        
-        return null;
     }
 
     /**

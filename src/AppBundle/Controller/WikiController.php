@@ -116,15 +116,11 @@ class WikiController extends Controller
         $mediawiki = $this->get('app.service.mediawiki');
 
         $session = new Session();
+        $result  = $mediawiki->login($request->request->get('username'), $request->request->get('password'));
 
-        $result = $mediawiki->login($request->request->get('username'), $request->request->get('password'));
-        $body   = (null != $result)
-            ? ['success' => true, 'userid' => $result->lguserid, 'username' => $result->lgusername]
-            : ['success' => false];
+        $session->set('login', $result);
 
-        $session->set('login', $body);
-
-        return Response::create(json_encode($body), 200, [
+        return Response::create(json_encode($result), 200, [
             'Content-Type' => 'application/json',
         ]);
     }
