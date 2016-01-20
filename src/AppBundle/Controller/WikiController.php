@@ -167,7 +167,7 @@ class WikiController extends Controller
         try {
             // check login
             $login = $session->get('login');
-            if (null == $login || !property_exists($login, 'userid')) {
+            if (null == $login || !is_array($login) || !array_key_exists('userid', $login)) {
                 throw new \Exception('Not logged in');
             }
 

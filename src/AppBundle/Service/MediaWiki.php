@@ -50,7 +50,7 @@ class MediaWiki
      * @param  string $username
      * @param  string $password
      * @param  string $token
-     * @return null|\StdClass
+     * @return null|\array
      * @throws \Exception
      */
     public function login($username, $password, $token = null)
