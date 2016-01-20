@@ -14,7 +14,7 @@ __NOTOC__
 | verschijningsfrequentie = {{ blad.frequentie|default('')|capitalize }}
 | inhoud                  = {{- blad.inhoud|default('')|capitalize|preg_replace('/([A-Z])/', ' $1') }}
 | doelgroep               = 
-| reproductiemethode      = {{ blad.reprMeth|capitalize }}
+| reproductiemethode      = {{ blad.reprMeth|default('')|capitalize }}
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}Tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {% if blad.tijdstipEersteUitgave is defined %}{{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}{% endif %} 
 | datum laatste uitgave   = {% if blad.tijdstipLaatsteUitgave is defined %}{{ blad.tijdstipLaatsteUitgave|default('')|localdate('long') }}{% endif %} 
