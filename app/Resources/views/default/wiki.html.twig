@@ -80,7 +80,7 @@ __NOTOC__
         {% set summary = summary ~ ' Het blad verscheen' %}
     {% endif %}
     {% if blad.frequentie is defined %}
-        {% set summary = summary ~ " #{blad.frequentie}" %}
+        {% set summary = summary ~ " #{blad.frequentie|frequency}" %}
     {% endif %}
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
@@ -95,13 +95,13 @@ __NOTOC__
 {% endif %}
 {#Derde zin#}
 {% if blad.reprMeth is defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method} en de inhoud bestond voornamelijk uit #{blad.inhoud|preg_replace('/([A-Z])/', ' $1')|lower|trim}." %}
+    {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method} en de inhoud bestond voornamelijk uit #{blad.inhoud|main_content}." %}
 {% endif %}
 {% if blad.reprMeth is defined and blad.inhoud is not defined %}
     {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method}." %}
 {% endif %}
 {% if blad.reprMeth is not defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " De inhoud bestond voornamelijk uit #{blad.inhoud}." %}
+    {% set summary = summary ~ " De inhoud bestond voornamelijk uit #{blad.inhoud|main_content}." %}
 {% endif %}
 {% endspaceless %}
 {{ summary|raw }}

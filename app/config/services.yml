@@ -32,8 +32,8 @@ services:
         class    : AppBundle\Service\MediaWiki
         arguments: ["%certs_path%", "@zend_cache"]
 
-    twig.extension.repro_method:
-        class    : AppBundle\Twig\Extension\ReproMethod
+    twig.extension.running_text_map:
+        class    : AppBundle\Twig\Extension\RunningTextMap
         arguments: ["%data_path%"]
         tags     :
           - { name: twig.extension }
