@@ -16,7 +16,7 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?laatste) AS ?tijdstipLaatsteUitgave)
                 ?oplageMin ?oplageMax
                 ?inhCat
-                (REPlACE(STR(?inhCat), "http://almere.pilod.nl/LydiaWinkel/Categorie([A-Z]\\w+)$", "$1") AS ?inhoud)
+                (REPlACE(STR(?inhCat), "http://almere.pilod.nl/LydiaWinkel/(?:Categorie|Category)?([A-Z]\\w+)$", "$1", "i") AS ?inhoud)
                 ?reprMeth
                 ?delpherLink
                 ?fullTxt
