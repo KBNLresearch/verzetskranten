@@ -105,15 +105,15 @@ __NOTOC__
 {% endif %}
 {% endspaceless %}
 {{ summary|raw }}
-
 {% if personen|length > 0 %}
+
 == Bij deze krant betrokken personen ==
 {% for persoon in personen %}
 * [[{{ persoon.naam }}]]
 {% endfor %}
 {% endif %}
-
 {% if relaties|length > 0 %}
+
 == Gerelateerde kranten ==
 {% for relatie in relaties %}
 * [[{{ relatie.Eindblad }}]]
