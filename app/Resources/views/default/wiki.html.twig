@@ -24,7 +24,7 @@ __NOTOC__
 | uitgevers               = 
 | drukkers                = {% for drukker in drukkers %}[[{{ drukker.naam }}]] {% endfor %} 
 | andere betrokkenen      = 
-| gerelateerd             = 
+| gerelateerd             = {% for relatie in relaties %}[[{{ relatie.Eindblad }}]] {% endfor %}
 | opvolger van            = 
 | voorloper van           = 
 | legaal voortgezet       = 
@@ -111,8 +111,12 @@ __NOTOC__
 * [[{{ persoon.naam }}]]
 {% endfor %}
 
+{% if relaties|length > 0 %}
 == Gerelateerde kranten ==
-
+{% for relatie in relaties %}
+* [[{{ relatie.Eindblad }}]]
+{% endfor %}
+{% endif %}
 
 {% verbatim %}{{Appendix||2={% endverbatim %}
 == Bronnen ==

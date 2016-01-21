@@ -50,12 +50,14 @@ class DefaultController extends Controller
         $plaatsen = $dao->plaatsVanUitgave('"' . $winkelnr . '"');
         $personen = $dao->dopPersonenBijBlad('"' . $winkelnr . '"');
         $drukkers = $dao->dopDrukkerijVanBlad('"' . $winkelnr . '"');
+        $relaties = $dao->dopGerelateerdeBladen('"' . $winkelnr . '"');
 
         $wikiText = $twig->render('default/wiki.html.twig', [
             'blad'     => $bladen[0],
             'plaatsen' => $plaatsen,
             'personen' => $personen,
             'drukkers' => $drukkers,
+            'relaties' => $relaties,
         ]);
 
         $htmlPreview = $mediawiki->preview($wikiText);

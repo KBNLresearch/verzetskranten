@@ -1,0 +1,29 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> 
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/> 
+PREFIX dbo: <http://dbpedia.org/ontology/> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX bf:  <http://bibframe.org/vocab/> 
+PREFIX dct:  <http://purl.org/dc/terms/> 
+
+SELECT DISTINCT 
+    (STR(?winkelID) AS ?WinkelNr)
+    (STR(?vanTitel) AS ?Beginblad)
+    (STR(?vanPlaatsnaam) AS ?Oorsprong)  
+    (STR(?naarTitel) AS ?Eindblad) 
+    (STR(?naarPlaatsnaam) AS ?Eindplaats) 
+    (STR(?naarTijdstip) AS ?Ontstaan)
+WHERE { 
+    ?ref ns0:connectsReferencedToPublication ?naarTs ;
+        dct:references ?vanTs . 
+    ?vanTs ns0:idWinkel/bf:identifierValue ?winkelID .
+    ?vanTs bf:hasInstance/bf:publication/bf:providerPlace ?vanPlaats .  
+    ?naarTs bf:hasInstance/bf:publication/bf:providerPlace ?naarPlaats . 
+    ?vanPlaats dbo:name ?vanPlaatsnaam . 
+    ?naarPlaats dbo:name ?naarPlaatsnaam . 
+    OPTIONAL { ?vanTs bf:workTitle/bf:titleValue ?vanTitel } 
+    OPTIONAL { ?naarTs bf:workTitle/bf:titleValue ?naarTitel } 
+    OPTIONAL { ?naarTs bf:serialFirstIssue ?naarTijdstip } 
+    FILTER(STR(?winkelID) = %1%)
+}
