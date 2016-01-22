@@ -57,11 +57,11 @@ __NOTOC__
     {% set summary = summary ~ "in " %}
     {% for plaats in plaatsen %}
         {% if loop.first == true or loop.length == 1 %}
-            {% set summary = summary ~ plaats.PlaatsUitgave %}
+            {% set summary = summary ~ plaats.PlaatsUitgave|default('') %}
         {% elseif loop.last == true %}
-            {% set summary = summary ~ " en #{plaats.PlaatsUitgave}" %}
+            {% set summary = summary ~ " en #{plaats.PlaatsUitgave|default('')}" %}
         {%  else %}
-            {% set summary = summary ~ ", #{plaats.PlaatsUitgave}" %}
+            {% set summary = summary ~ ", #{plaats.PlaatsUitgave|default('')}" %}
         {% endif %}
     {% endfor %}
     {% set summary = summary ~ ' werd uitgegeven' %}
@@ -141,6 +141,6 @@ __NOTOC__
 {% verbatim %}{{commonscat|Dutch_resistance_newspapers from World War II|Dutch resistance newspapers from World War II}}{% endverbatim %}
 
 == Ruwe tekst Winkel-lemma==
-''Hieronder staat de tekst over '''{{ blad.titel }} (verzetsblad, {{ blad.PlaatsUitgave }})''' uit lemma nr. {{ blad.WinkelNr }} van [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers]]. Met behulp van deze tekst (en andere bronnen) kunnen Wikipedianen het bestaande artikel verbeteren. ''De Ondergronds Pers'' is ook als [[:commons:File:PDF of De Ondergrondse Pers 1940-1945 - derde druk - 1989.pdf|full-text PDF beschikbaar]] op Wikimedia Commons, daar is onderstaande tekst dus ook terug te vinden.''
+''Hieronder staat de tekst over '''{{ blad.titel }} (verzetsblad, {{ blad.PlaatsUitgave|default('') }})''' uit lemma nr. {{ blad.WinkelNr }} van [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers]]. Met behulp van deze tekst (en andere bronnen) kunnen Wikipedianen het bestaande artikel verbeteren. ''De Ondergronds Pers'' is ook als [[:commons:File:PDF of De Ondergrondse Pers 1940-1945 - derde druk - 1989.pdf|full-text PDF beschikbaar]] op Wikimedia Commons, daar is onderstaande tekst dus ook terug te vinden.''
 
 <blockquote>{{ blad.fullTxt|default('') }}</blockquote>
