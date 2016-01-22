@@ -81,11 +81,13 @@ class WikiController extends Controller
             $plaatsen = $dao->plaatsVanUitgave('"' . $result->WinkelNr . '"');
             $personen = $dao->dopPersonenBijBlad('"' . $result->WinkelNr . '"');
             $drukkers = $dao->dopDrukkerijVanBlad('"' . $result->WinkelNr . '"');
+            $relaties = $dao->dopGerelateerdeBladen('"' . $result->WinkelNr . '"');
             $contents = $twig->render('default/wiki.html.twig', [
                 'blad'     => $result,
                 'plaatsen' => $plaatsen,
                 'personen' => $personen,
                 'drukkers' => $drukkers,
+                'relaties' => $relaties,
             ]);
 
             $fileSystemSafeTitle = strtolower(preg_replace('/[^a-z-0-9\-\_]/i', '-', $result->titel));
@@ -186,11 +188,13 @@ class WikiController extends Controller
                 $plaatsen = $dao->plaatsVanUitgave('"' . $result->WinkelNr . '"');
                 $personen = $dao->dopPersonenBijBlad('"' . $result->WinkelNr . '"');
                 $drukkers = $dao->dopDrukkerijVanBlad('"' . $result->WinkelNr . '"');
+                $relaties = $dao->dopGerelateerdeBladen('"' . $result->WinkelNr . '"');
                 $wikitext = $twig->render('default/wiki.html.twig', [
                     'blad'     => $result,
                     'plaatsen' => $plaatsen,
                     'personen' => $personen,
                     'drukkers' => $drukkers,
+                    'relaties' => $relaties,
                 ]);
 
                 // post to wikipedia
