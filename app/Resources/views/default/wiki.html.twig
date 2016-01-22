@@ -11,7 +11,7 @@ __NOTOC__
 | motto                   = 
 | plaats van uitgave      = {{ blad.PlaatsUitgave|default('')|capitalize }}
 | verspreidingsgebied     = 
-| verschijningsfrequentie = {{ blad.frequentie|default('')|frequency|capitalize }}
+| verschijningsfrequentie = {{ blad.frequentie|default('')|capitalize }}
 | inhoud                  = {{ blad.inhoud|default('')|main_content|capitalize }}
 | doelgroep               = 
 | reproductiemethode      = {{ blad.reprMeth|default('')|repro_method|capitalize }}
@@ -80,7 +80,7 @@ __NOTOC__
         {% set summary = summary ~ ' Het blad verscheen' %}
     {% endif %}
     {% if blad.frequentie is defined %}
-        {% set summary = summary ~ " #{blad.frequentie|frequency}" %}
+        {% set summary = summary ~ " #{blad.frequentie}" %}
     {% endif %}
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
