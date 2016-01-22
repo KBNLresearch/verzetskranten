@@ -172,8 +172,8 @@ class WikiController extends Controller
             }
 
             // get edit token if not already present
-            if (null == ($token = $session->get('edittoken', null))) {
-                $token = $mediawiki->token('edittoken');
+            if (null == ($token = $session->get('csrf', null))) {
+                $token = $mediawiki->token('csrf');
             }
 
             // query all the selected bladen
