@@ -169,8 +169,15 @@ class MediaWiki
 
         $body = json_decode($response->getBody());
         if (EditResult::SUCCESS != $body->edit->result) {
-            $error = $body->error;
-            throw new \Exception($error->info, $error->code);
+            if (property_exists($body, 'error')) {
+                $error = $body->error;
+                throw new \Exception($error->info, $error->code);
+            }
+
+            if (property_exists($body, 'captcha')) {
+                $msg = sprintf('Edit requires <a href="%s%s">captcha</a>', self::BASE_URI, $body->captcha->url);
+                throw new \Exception($msg);
+            }
         }
     }
 
