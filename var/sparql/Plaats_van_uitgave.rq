@@ -19,5 +19,6 @@ WHERE {
     OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
     OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
     FILTER(STR(?winkelID) = %1%)
+    FILTER(BOUND(?plts1) || BOUND(?plts2))
 }
 ORDER BY ?winkelID 
