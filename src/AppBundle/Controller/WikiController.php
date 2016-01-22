@@ -90,7 +90,7 @@ class WikiController extends Controller
                 'relaties' => $relaties,
             ]);
 
-            $fileSystemSafeTitle = strtolower(preg_replace('/[^a-z-0-9\-\_]/i', '-', $result->titel));
+            $fileSystemSafeTitle = strtolower(preg_replace('/[^a-z-0-9\-\_]/i', '-', $result->titelWP));
             $filename            = sprintf('%s-%s.wiki', $result->WinkelNr, $fileSystemSafeTitle);
 
             $zipArchive->addFromString($filename, $contents);
