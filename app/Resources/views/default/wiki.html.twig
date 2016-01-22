@@ -57,11 +57,13 @@ __NOTOC__
         {% if loop.first == true or loop.length == 1 %}
             {% set summary = summary ~ plaats.PlaatsUitgave|default('') %}
         {% elseif loop.last == true %}
-            {% set summary = summary ~ " en #{plaats.PlaatsUitgave|default('')}" %}
+            {% set summary = summary ~ " en #{plaats.PlaatsUitgave|default('')} " %}
         {%  else %}
-            {% set summary = summary ~ ", #{plaats.PlaatsUitgave|default('')}" %}
+            {% set summary = summary ~ ", #{plaats.PlaatsUitgave|default('')} " %}
         {% endif %}
     {% endfor %}
+{% endif %}
+{% if blad.tijdstipEersteUitgave is defined or blad.tijdstipLaatsteUitgave is defined or plaatsen|length > 0 %}
     {% set summary = summary ~ ' werd uitgegeven' %}
 {% endif %}
 {% set summary = summary ~ '.' %}
