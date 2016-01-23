@@ -1,6 +1,6 @@
 {
-    "name": "rocco/verzetskranten",
-    "license": "proprietary",
+    "name": "kb/verzetskranten",
+    "license": "MIT",
     "type": "project",
     "autoload": {
         "psr-4": {
@@ -26,7 +26,12 @@
         "symfony/monolog-bundle": "^2.8",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "^2.0"
+        "incenteev/composer-parameter-handler": "^2.0",
+        "easyrdf/easyrdf": "dev-master",
+        "zendframework/zend-filter": "^2.5",
+        "zendframework/zend-cache": "^2.5",
+        "guzzlehttp/guzzle": "^6.1",
+        "jasny/twig-extensions": "master@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -39,7 +44,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "AppBundle\\ScriptHandler::createCacheDirs"
         ],
         "post-update-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -47,7 +53,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "AppBundle\\ScriptHandler::createCacheDirs"
         ]
     },
     "extra": {

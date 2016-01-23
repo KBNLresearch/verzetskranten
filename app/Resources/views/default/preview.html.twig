@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <a href="{{ path('homepage') }}" class="btn navbar-btn">Back to Overview</a>
+</nav>
+
+<div id="accordion" class="panel-group" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading-wiki">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-wiki" aria-expanded="true" aria-controls="collapse-wiki">
+                    Wiki Text
+                </a>
+                <button id="btn-convert" type="button" class="btn btn-default btn-xs pull-right">
+                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                    Update preview
+                </button>
+            </h4>
+        </div>
+        <div id="collapse-wiki" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-wiki">
+            <div class="panel-body">
+                <textarea id="wiki-text">{{ wiki_text }}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading-html">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-html" aria-expanded="false" aria-controls="collapse-html">
+                    HTML Preview
+                </a>
+            </h4>
+        </div>
+        <div id="collapse-html" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-html">
+            <div id="html-text" class="panel-body">
+                {{ html_preview|raw }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+#wiki-text {
+    font-family: "Courier New", monospace;
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+(function () {
+    var txtWiki = $('#wiki-text'),
+        txtHtml = $('#html-text'),
+        colHtml = $('#collapse-html');
+
+    var onBtnConvertClick = function () {
+        $.ajax('{{ path('wiki_convert') }}', {
+            method : 'POST',
+            success: onConvertSuccess,
+            data   : {
+                wikitext: txtWiki.val()
+            }
+        });
+    };
+
+    var onConvertSuccess = function (html) {
+        txtHtml.html(html);
+        colHtml.collapse('show');
+    };
+
+    $('#btn-convert').on('click', onBtnConvertClick);
+}());
+</script>
+{% endblock %}

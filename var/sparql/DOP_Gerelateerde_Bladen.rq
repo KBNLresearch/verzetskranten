@@ -1,0 +1,21 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> 
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/> 
+PREFIX dbo: <http://dbpedia.org/ontology/> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX bf:  <http://bibframe.org/vocab/> 
+PREFIX dct:  <http://purl.org/dc/terms/> 
+
+SELECT DISTINCT 
+    (STR(?winkelID) AS ?WinkelNr)
+    (STR(?naarTitel) AS ?Eindblad) 
+    (STR(?naarWikiTitel) AS ?EindWiki)
+WHERE { 
+    ?ref ns0:connectsReferencedToPublication ?naarTs ;
+        dct:references ?vanTs . 
+    ?vanTs ns0:idWinkel/bf:identifierValue ?winkelID .
+    OPTIONAL { ?naarTs bf:workTitle/bf:titleValue ?naarTitel }
+    OPTIONAL { ?naarTs a ns0:UndergroundPublication ; ns0:titleDescriptiveArticle ?naarWikiTitel }
+    FILTER(STR(?winkelID) = %1%)
+}

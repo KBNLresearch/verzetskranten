@@ -1,9 +1,49 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-#    parameter_name: value
+    sparql_endpoint: http://almere.pilod.nl/sparql
+    query_path     : "%kernel.root_dir%/../var/sparql"
+    certs_path     : "%kernel.root_dir%/../var/certs/cacert.pem"
+    data_path      : "%kernel.root_dir%/../var/data"
+
+    cache:
+        adapter:
+            name: filesystem
+            options:
+                cache_dir      : "%kernel.root_dir%/../var/cache/%kernel.environment%/app"
+                dir_permission : '0760'
+                file_permission: '0660'
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    sparql_client:
+        class    : EasyRdf\Sparql\Client
+        arguments: ["%sparql_endpoint%"]
+
+    zend_cache:
+        class    : Zend\Cache\Storage\StorageInterface
+        factory  : [Zend\Cache\StorageFactory, factory]
+        arguments: ["%cache%"]
+
+    app.dao.dop:
+        class    : AppBundle\Dao\Dop
+        arguments: ["@sparql_client", "%query_path%", "@zend_cache"]
+    
+    app.service.mediawiki:
+        class    : AppBundle\Service\MediaWiki
+        arguments: ["%certs_path%", "@zend_cache"]
+
+    twig.extension.running_text_map:
+        class    : AppBundle\Twig\Extension\RunningTextMap
+        arguments: ["%data_path%"]
+        tags     :
+          - { name: twig.extension }
+
+    twig.extension.pcre:
+        class: Jasny\Twig\PcreExtension
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.date:
+        class: Jasny\Twig\DateExtension
+        tags:
+          - { name: twig.extension }

@@ -1,0 +1,21 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bf: <http://bibframe.org/vocab/>
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
+PREFIX dbo: <http://dbpedia.org/ontology/> 
+
+SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
+                (STR(?titel) AS ?Blad)
+                (STR(?plts) AS ?Plaats)
+                (STR(?per) AS ?Periode)
+                (STR(?begin) AS ?PerBegin)
+                (STR(?eind) AS ?PerEind)
+FROM <http://almere.pilod.nl/LydiaWinkel/>
+WHERE {
+    ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts }
+    OPTIONAL { ?ts ns0:periodDescription ?per }
+    OPTIONAL { ?ts bf:serialFirstIssue ?begin }
+    OPTIONAL { ?ts bf:serialLastIssue ?eind }
+    OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
+}
+ORDER BY ?winkelID

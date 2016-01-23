@@ -1,0 +1,18 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
+
+SELECT ?subj
+      (STR(?naam) AS ?Persoon)
+      (STR(?pagina) AS ?blz)
+FROM <http://almere.pilod.nl/LydiaWinkel/>
+WHERE {
+    ?subj rdfs:label ?naam ;
+    ?foaf:lastName ?anaam .
+    ?ref dct:references ?subj .
+    ?ref ns0:pageNumber ?pagina .
+    MINUS { ?subj owl:sameAs ?tgh }
+}
+ORDER BY ?anaam , ?pagina
