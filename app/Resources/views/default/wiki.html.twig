@@ -1,7 +1,6 @@
 {% verbatim %}
 {{DisclaimerVerzetskrantenproject}}
 {% endverbatim %}
-__NOTOC__
 
 {% verbatim %}{{Infobox illegaal blad{% endverbatim %}
 | titel                   = {{ blad.titel|default('Ongetiteld verzetsblad') }}
@@ -38,7 +37,7 @@ __NOTOC__
 {% set summary = '' %}
 {% spaceless %}
 {#Eerste zin#}
-{% set summary = summary ~ "'''#{blad.titel|default('Ongetiteld verzetsblad')}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
+{% set summary = summary ~ "'''#{blad.titel|default('Ongetiteld verzetsblad')}''' was een [[verzetsblad]] uit de [[Tweede Wereldoorlog]]" %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatsteUitgave is defined %}
     {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} tot en met #{blad.tijdstipLaatsteUitgave|localdate('long')} " %}
 {% endif %}
@@ -121,7 +120,7 @@ __NOTOC__
 {% endif %}
 
 {% verbatim %}{{Appendix||2={% endverbatim %}
-== Bronnen ==
+;Bronnen
 * {% verbatim %}{{nl}}{% endverbatim %} Lemma {{ blad.WinkelNr }} in [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers 1940-1945]], [[Lydia_Winkel|Lydia E. Winkel]] en Hans de Vries, 3e druk, 1989. [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|Full-text]] (PDF) op Wikimedia Commons.
 {% if blad.PPNFysiek is defined %}
 * {% verbatim %}{{nl}}{% endverbatim %} [http://www.delpher.nl/nl/kranten/results/index?page=1&cql%5B%5D=ppn%3D{{ blad.PPNFysiek }}&coll=dddtitel Afleveringen van de ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in full-text op [[Delpher|Delpher.nl]]
@@ -129,16 +128,17 @@ __NOTOC__
 {% if blad.PPNDigitaal is defined %}
 * {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
 {% endif %}
-;Overige bronnen en verwijzingen
-{% verbatim %}{{References||30em}}{% endverbatim %}
+<!--;Overige bronnen en verwijzingen
+{% verbatim %}{{References||50em}}{% endverbatim %}
 == Noten ==
 * Dit artikel is geschreven in het kader van het [[Wikipedia:Wikiproject/Verzetskranten|Wikiproject Verzetskranten]]
 ;Overige noten
-{% verbatim %}{{references|group=noot||30em}}{% endverbatim %}
-== Externe links ==
+{% verbatim %}{{references|group=noot||50em}}{% endverbatim %}
+== Externe links == -->
 {% verbatim %}}}{% endverbatim %}
 
 {% verbatim %}{{commonscat|Dutch_resistance_newspapers from World War II|Dutch resistance newspapers from World War II}}{% endverbatim %}
+{% verbatim %}<!-- [[Categorie:Illegale pers in de Tweede Wereldoorlog|Aetherbode]] -->{% endverbatim %}
 
 == Ruwe tekst Winkel-lemma==
 ''Hieronder staat de tekst over '''{{ blad.titel|default('Ongetiteld verzetsblad') }} (verzetsblad, {{ blad.PlaatsUitgave|default('') }})''' uit lemma nr. {{ blad.WinkelNr }} van [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers]]. Met behulp van deze tekst (en andere bronnen) kunnen Wikipedianen het bestaande artikel verbeteren. ''De Ondergronds Pers'' is ook als [[:commons:File:PDF of De Ondergrondse Pers 1940-1945 - derde druk - 1989.pdf|full-text PDF beschikbaar]] op Wikimedia Commons, daar is onderstaande tekst dus ook terug te vinden.''
