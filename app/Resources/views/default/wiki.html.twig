@@ -18,7 +18,7 @@
 | datum eerste uitgave    = {% if blad.tijdstipEersteUitgave is defined %}{{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}{% endif %} 
 | datum laatste uitgave   = {% if blad.tijdstipLaatsteUitgave is defined %}{{ blad.tijdstipLaatsteUitgave|default('')|localdate('long') }}{% endif %} 
 | formaat                 = 
-| taal                    = Nederland
+| taal                    = Nederlands
 | vervaardigers           = {% for persoon in personen %}[[{{ persoon.naam }}]] {% endfor %} 
 | uitgevers               = 
 | drukkers                = {% for drukker in drukkers %}[[{{ drukker.naam }}]] {% endfor %} 
