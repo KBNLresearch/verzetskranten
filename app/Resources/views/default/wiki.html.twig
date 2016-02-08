@@ -122,7 +122,7 @@
 ;Bronnen
 * {% verbatim %}{{nl}}{% endverbatim %} Lemma {{ blad.WinkelNr }} in [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers 1940-1945]], [[Lydia_Winkel|Lydia E. Winkel]] en Hans de Vries, 3e druk, 1989. [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|Full-text]] (PDF) op Wikimedia Commons.
 {% if blad.PPNFysiek is defined %}
-* {% verbatim %}{{nl}}{% endverbatim %} [http://www.delpher.nl/nl/kranten/results/index?page=1&cql%5B%5D=ppn%3D{{ blad.PPNFysiek }}&coll=dddtitel Afleveringen van de ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in full-text op [[Delpher|Delpher.nl]]
+* {% verbatim %}{{nl}}{% endverbatim %} [http://www.delpher.nl/nl/kranten/results/index?page=1&cql%5B%5D=ppn%3D{{ blad.PPNFysiek }}&coll=dddtitel Afleveringen van ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in full-text op [[Delpher|Delpher.nl]]
 {% endif %}
 {% if blad.PPNDigitaal is defined %}
 * {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
