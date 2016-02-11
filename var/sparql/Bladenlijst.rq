@@ -5,15 +5,17 @@ PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
-                (STR(?titel) AS ?Blad)
+                (STR(?wikiTitel) AS ?wikiID)
+                (STR(?titel) AS ?Titel)
                 (STR(?ppnF) AS ?PPNFysiek)
                 (STR(?ppnD) AS ?PPNDigitaal)
                 (STR(?plts) AS ?PlaatsUitgave)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
 WHERE {
     ?ts a ns0:UndergroundPublication .
-    OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
     ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    ?ts a ns0:UndergroundPublication ; ns0:titleDescriptiveArticle ?wikiTitel .
+    OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
     OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts }
     OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
     OPTIONAL { ?ts bf:hasInstance/ns0:digitalPPN-KB/bf:identifierValue ?ppnD }
