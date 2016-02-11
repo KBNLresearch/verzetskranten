@@ -1,0 +1,26 @@
+{% verbatim %}{{Inhoud abc}}{% endverbatim %}
+{% for idx, partition in partitions %}
+=== {{ idx|upper }} ===
+{% verbatim %}
+{| class="wikitable sortable collapsible" style="font-size: 85%;"
+! Titel beginnetje (in projectnaamruimte)
+! Plaats van uitgave
+! Nr in ''[[De_ondergrondse_pers_1940-1945|De Winkel]]''<br/> ([[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|full-text]])
+! Beginnetje gewijzigd t.o.v. ruwe db-export?
+! Opmerkingen
+! Titel al beschikbaar in hoofdnaamruimte?
+|-bgcolor="#E6E6FA"
+|-
+{% endverbatim %}
+{% for blad in partition %}
+|[[Wikipedia:Wikiproject/Verzetskranten/Beginnetjes/{{ blad.wikiID }}|{{ blad.Titel|default('Ongetiteld verzetsblad') }}]]
+|{{ blad.PlaatsUitgave|default('')|capitalize }}
+|{{ blad.WinkelNr }}
+|Nee
+| -
+|Nee
+|-
+{% endfor %}
+|}
+{% endfor %}
+{% verbatim %}{{Inhoud abc}}{% endverbatim %}

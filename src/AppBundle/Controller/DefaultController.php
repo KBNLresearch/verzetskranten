@@ -14,17 +14,62 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      * @param  Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function indexAction(Request $request)
+    public function homeAction(Request $request)
     {
         $dao = $this->get('app.dao.dop');
 
         $session = new Session();
 
-        return $this->render('default/index.html.twig', [
+        return $this->render('default/home.html.twig', [
             'dao'   => $dao,
             'login' => $session->get('login'),
+        ]);
+    }
+
+    /**
+     * @Route("/index", name="index")
+     * @param  Request $request
+     * @return Response
+     */
+    public function indexAction(Request $request)
+    {
+        $dao       = $this->get('app.dao.dop');
+        $mediawiki = $this->get('app.service.mediawiki');
+        $twig      = $this->get('twig');
+
+        $list       = $dao->bladenlijst;
+        $partitions = array_reduce($list->getArrayCopy(), function (array $carry, $item) {
+            $idx = (isset($item->Titel) && !empty($item->Titel) && preg_match('/([a-z0-9]{1})/i', $item->Titel, $matches))
+                ? $matches[1] : '?';
+
+            if (!array_key_exists($idx, $carry)) {
+                $carry[$idx] = [];
+            }
+
+            $carry[$idx][] = $item;
+            return $carry;
+        }, []);
+
+
+        ksort($partitions, SORT_NATURAL);
+        foreach ($partitions as &$partition) {
+            usort($partition, function ($a, $b) {
+                return strnatcasecmp($a->WinkelNr, $b->WinkelNr);
+            });
+        }
+
+        $wikiText = $twig->render('default/wiki-index.html.twig', [
+            'partitions' => $partitions,
+        ]);
+
+        $htmlPreview = $mediawiki->preview($wikiText);
+
+        return $this->render('default/preview.html.twig', [
+            'wiki_text'    => $wikiText,
+            'html_preview' => $htmlPreview,
+
         ]);
     }
 
@@ -70,6 +115,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/nuke-cache", name="nuke_cache")
+     * @return Response
      */
     public function nukeCacheAction()
     {

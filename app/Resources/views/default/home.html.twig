@@ -2,6 +2,10 @@
 
 {% block body %}
 <div role="toolbar" class="btn-group pull-left">
+    <a id="btn-index" role="button" class="btn btn-default navbar-btn">
+        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+        Index
+    </a>
     <a id="btn-preview" role="button" class="btn btn-default navbar-btn disabled">
         <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
         Preview
@@ -61,6 +65,7 @@
 <script>
 (function () {
     var wrapper     = $('#wrapper'),
+        btnIndex    = $('#btn-index'),
         btnPreview  = $('#btn-preview'),
         btnDownload = $('#btn-download'),
         btnExport   = $('#btn-export'),
@@ -129,6 +134,10 @@
         } else  {
             warn('Failed to clear cache', wrapper);
         }
+    };
+
+    var onBtnIndexClick = function () {
+        window.location = '{{ path('index') }}';
     };
 
     var onBtnPreviewClick = function () {
@@ -213,6 +222,7 @@
         btnExport.toggleClass('disabled', (0 === selection.length));
     };
 
+    btnIndex.on('click', onBtnIndexClick);
     btnPreview.on('click', onBtnPreviewClick);
     btnDownload.on('click', onBtnDownloadClick);
     btnExport.on('click', onBtnExportClick);
