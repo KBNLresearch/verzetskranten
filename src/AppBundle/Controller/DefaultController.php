@@ -16,13 +16,13 @@ class DefaultController extends Controller
      * @param  Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function homeAction(Request $request)
     {
         $dao = $this->get('app.dao.dop');
 
         $session = new Session();
 
-        return $this->render('default/index.html.twig', [
+        return $this->render('default/home.html.twig', [
             'dao'   => $dao,
             'login' => $session->get('login'),
         ]);
