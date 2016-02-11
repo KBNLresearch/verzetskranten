@@ -10,7 +10,7 @@
 | motto                   = 
 | plaats van uitgave      = {{ blad.PlaatsUitgave|default('')|capitalize }}
 | verspreidingsgebied     = 
-| verschijningsfrequentie = {{ blad.frequentie|default('')|capitalize }}
+| verschijningsfrequentie = {{ blad.frequentie|default('')|frequency|capitalize }}
 | inhoud                  = {{ blad.inhoud|default('')|main_content|capitalize }}
 | doelgroep               = 
 | reproductiemethode      = {{ blad.reprMeth|default('')|repro_method|capitalize }}
@@ -78,7 +78,7 @@
         {% set summary = summary ~ ' Het blad verscheen' %}
     {% endif %}
     {% if blad.frequentie is defined %}
-        {% set summary = summary ~ " #{blad.frequentie}" %}
+        {% set summary = summary ~ " #{blad.frequentie|frequency}" %}
     {% endif %}
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
