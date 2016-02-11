@@ -82,10 +82,10 @@
     {% endif %}
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
-        {% if blad.oplageMin < blad.oplageMax %}
+        {% if blad.oplageMin is defined and blad.oplageMax is defined and blad.oplageMin < blad.oplageMax %}
             {% set summary = summary ~ " tussen de #{blad.oplageMin} en #{blad.oplageMax} exemplaren" %}
         {% endif %}
-        {% if blad.oplageMin == blad.oplageMax %}
+        {% if blad.oplageMin is defined and (blad.oplageMax is not defined or blad.oplageMin == blad.oplageMax) %}
             {% set summary = summary ~ " van #{blad.oplageMin} exemplaren" %}
         {% endif %}
     {% endif %}
