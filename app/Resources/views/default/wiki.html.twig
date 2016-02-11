@@ -23,7 +23,7 @@
 | uitgevers               = 
 | drukkers                = {% for drukker in drukkers %}[[{{ drukker.naam }}]] {% endfor %} 
 | andere betrokkenen      = 
-| gerelateerd             = {% for relatie in relaties %}[[{{ relatie.EindWiki }}|{{ relatie.Eindblad }}]] {% endfor %} 
+| gerelateerd             = {% for relatie in relaties %}[[{{ relatie.EindWiki|default('Ongetiteld verzetsblad') }}|{{ relatie.Eindblad|default('Ongetiteld verzetsblad') }}]] {% endfor %} 
 | opvolger van            = 
 | voorloper van           = 
 | legaal voortgezet       = 
@@ -82,10 +82,10 @@
     {% endif %}
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
-        {% if blad.oplageMin < blad.oplageMax %}
+        {% if blad.oplageMin is defined and blad.oplageMax is defined and blad.oplageMin < blad.oplageMax %}
             {% set summary = summary ~ " tussen de #{blad.oplageMin} en #{blad.oplageMax} exemplaren" %}
         {% endif %}
-        {% if blad.oplageMin == blad.oplageMax %}
+        {% if blad.oplageMin is defined and (blad.oplageMax is not defined or blad.oplageMin == blad.oplageMax) %}
             {% set summary = summary ~ " van #{blad.oplageMin} exemplaren" %}
         {% endif %}
     {% endif %}
@@ -114,7 +114,7 @@
 
 == Gerelateerde kranten ==
 {% for relatie in relaties %}
-* [[{{ relatie.EindWiki }}]]  <ref>''{{ relatie.Eindblad }}'': Lemma {{ relatie.WinkelNr }} in [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|De ondergrondse pers 1940-1945]] (PDF)</ref>
+* [[{{ relatie.EindWiki|default('Ongetiteld verzetsblad') }}]]  <ref>''{{ relatie.Eindblad|default('Ongetiteld verzetsblad') }}'': Lemma {{ relatie.WinkelNr }} in [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|De ondergrondse pers 1940-1945]] (PDF)</ref>
 {% endfor %}
 {% endif %}
 
@@ -125,7 +125,7 @@
 * {% verbatim %}{{nl}}{% endverbatim %} [http://www.delpher.nl/nl/kranten/results/index?page=1&cql%5B%5D=ppn%3D{{ blad.PPNFysiek }}&coll=dddtitel Afleveringen van ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in full-text op [[Delpher|Delpher.nl]]
 {% endif %}
 {% if blad.PPNDigitaal is defined %}
-* {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
+* {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
 {% endif %}
 ;Overige bronnen en verwijzingen
 {% verbatim %}{{References||50em}}{% endverbatim %}
