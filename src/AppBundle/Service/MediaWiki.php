@@ -214,7 +214,7 @@ class MediaWiki
                 'format'       => 'json',
                 'prop'         => 'text',
                 'contentmodel' => 'wikitext',
-                'text'         => $wikiText
+                'text'         => $wikiText,
             ]
         ]);
 
