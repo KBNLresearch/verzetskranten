@@ -155,7 +155,6 @@ class MediaWiki
             'form_params' => [
                 'action'       => 'edit',
                 'format'       => 'json',
-                'prop'         => 'text',
                 'contentmodel' => 'wikitext',
                 'token'        => $token,
                 'title'        => self::WIKI_NAMESPACE . $title,
