@@ -124,8 +124,10 @@
         fn(res.messages.join('<br>'), wrapper);
     };
 
-    var onBtnExportClick = function (evt) {
-        evt.preventDefault();
+    var onBtnExportClick = function () {
+        if (!window.confirm('Are you sure you want to export this items?')) {
+            return;
+        }
 
         $.ajax('{{ path('wiki_edit') }}', {
             method : 'POST',
