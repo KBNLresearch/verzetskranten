@@ -168,10 +168,10 @@ class MediaWiki
         }
 
         $body = json_decode($response->getBody());
-        if (EditResult::SUCCESS != $body->edit->result) {
+        if (!property_exists($body, 'edit') || EditResult::SUCCESS != $body->edit->result) {
             if (property_exists($body, 'error')) {
                 $error = $body->error;
-                throw new \Exception($error->info, $error->code);
+                throw new \Exception($error->info);
             }
 
             if (property_exists($body, 'captcha')) {
