@@ -69,7 +69,6 @@ class DefaultController extends Controller
         return $this->render('default/preview.html.twig', [
             'wiki_text'    => $wikiText,
             'html_preview' => $htmlPreview,
-
         ]);
     }
 
@@ -108,6 +107,7 @@ class DefaultController extends Controller
         $htmlPreview = $mediawiki->preview($wikiText);
 
         return $this->render('default/preview.html.twig', [
+            'wiki_title'   => $bladen[0]->titelWP,
             'wiki_text'    => $wikiText,
             'html_preview' => $htmlPreview,
         ]);

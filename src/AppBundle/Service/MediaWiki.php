@@ -143,12 +143,11 @@ class MediaWiki
     }
 
     /**
-     * @param  $token
      * @param  $title
      * @param  $wikiText
      * @throws \Exception
      */
-    public function edit($token, $title, $wikiText)
+    public function edit($title, $wikiText)
     {
         $httpClient = $this->getHttpClient();
         $response   = $httpClient->post(self::API_PATH, [
@@ -156,7 +155,7 @@ class MediaWiki
                 'action'       => 'edit',
                 'format'       => 'json',
                 'contentmodel' => 'wikitext',
-                'token'        => $token,
+                'token'        => $this->token('csrftoken'),
                 'title'        => self::WIKI_NAMESPACE . $title,
                 'text'         => $wikiText,
             ]
