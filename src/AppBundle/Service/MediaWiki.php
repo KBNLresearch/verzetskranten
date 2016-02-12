@@ -143,21 +143,19 @@ class MediaWiki
     }
 
     /**
-     * @param  $token
      * @param  $title
      * @param  $wikiText
      * @throws \Exception
      */
-    public function edit($token, $title, $wikiText)
+    public function edit($title, $wikiText)
     {
         $httpClient = $this->getHttpClient();
         $response   = $httpClient->post(self::API_PATH, [
             'form_params' => [
                 'action'       => 'edit',
                 'format'       => 'json',
-                'prop'         => 'text',
                 'contentmodel' => 'wikitext',
-                'token'        => $token,
+                'token'        => $this->token('csrftoken'),
                 'title'        => self::WIKI_NAMESPACE . $title,
                 'text'         => $wikiText,
             ]
@@ -168,9 +166,16 @@ class MediaWiki
         }
 
         $body = json_decode($response->getBody());
-        if (EditResult::SUCCESS != $body->edit->result) {
-            $error = $body->error;
-            throw new \Exception($error->info, $error->code);
+        if (!property_exists($body, 'edit') || EditResult::SUCCESS != $body->edit->result) {
+            if (property_exists($body, 'error')) {
+                $error = $body->error;
+                throw new \Exception($error->info);
+            }
+
+            if (property_exists($body, 'captcha')) {
+                $msg = sprintf('Edit requires <a href="%s%s">captcha</a>', self::BASE_URI, $body->captcha->url);
+                throw new \Exception($msg);
+            }
         }
     }
 
@@ -208,7 +213,7 @@ class MediaWiki
                 'format'       => 'json',
                 'prop'         => 'text',
                 'contentmodel' => 'wikitext',
-                'text'         => $wikiText
+                'text'         => $wikiText,
             ]
         ]);
 

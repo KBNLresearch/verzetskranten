@@ -16,11 +16,20 @@
                     <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
                     Update preview
                 </button>
+                {% if wiki_title is defined %}
+                <button id="btn-export" type="button" class="btn btn-default btn-xs pull-right">
+                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                    Export
+                </button>
+                {% endif %}
             </h4>
         </div>
         <div id="collapse-wiki" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-wiki">
             <div class="panel-body">
-                <textarea id="wiki-text">{{ wiki_text }}</textarea>
+            {% if wiki_title is defined %}
+                <input id="wiki-title" name="wiki-title" type="text" class="form-control" placeholder="Title" value="{{ wiki_title|default('') }}">
+            {% endif %}
+                <textarea id="wiki-text" name="wiki-text">{{ wiki_text }}</textarea>
             </div>
         </div>
     </div>
@@ -43,11 +52,18 @@
 
 {% block stylesheets %}
 <style>
+#wiki-title {
+    width: 98%;
+    margin: 0 0 10px 0;
+}
 #wiki-text {
     font-family: "Courier New", monospace;
     width: 100%;
     height: 500px;
     border: none;
+}
+.panel-title button:not(:first-child) {
+    margin: 0 5px;
 }
 </style>
 {% endblock %}
@@ -55,9 +71,37 @@
 {% block javascripts %}
 <script>
 (function () {
-    var txtWiki = $('#wiki-text'),
+    var wrapper = $('#wrapper'),
+        titWiki = $('#wiki-title'),
+        txtWiki = $('#wiki-text'),
         txtHtml = $('#html-text'),
         colHtml = $('#collapse-html');
+
+    var success = function (msg, target) {
+        var target = (undefined === target) ? window : target,
+                html   = `
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <strong>Success!</strong> ${msg}
+            </div>`;
+
+        $(target).prepend(html);
+    };
+
+    var warn = function (msg, target) {
+        var target = (undefined === target) ? window : target,
+                html   = `
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <strong>Warning!</strong> ${msg}
+            </div>`;
+
+        $(target).prepend(html);
+    };
 
     var onBtnConvertClick = function () {
         $.ajax('{{ path('wiki_convert') }}', {
@@ -74,7 +118,27 @@
         colHtml.collapse('show');
     };
 
+    var onExportSuccess = function (res) {
+        var fn = (0 < res.success && 0 == res.failed) ? success : warn;
+
+        fn(res.messages.join('<br>'), wrapper);
+    };
+
+    var onBtnExportClick = function (evt) {
+        evt.preventDefault();
+
+        $.ajax('{{ path('wiki_edit') }}', {
+            method : 'POST',
+            success: onExportSuccess,
+            data   : {
+                wikititle: titWiki.val(),
+                wikitext : txtWiki.val()
+            }
+        });
+    };
+
     $('#btn-convert').on('click', onBtnConvertClick);
+    $('#btn-export').on('click', onBtnExportClick);
 }());
 </script>
 {% endblock %}

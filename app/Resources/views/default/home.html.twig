@@ -128,9 +128,9 @@
     };
 
     var onExportSuccess = function (res) {
-        var fn = (true == res.success) ? success : warn;
+        var fn = (0 < res.success && 0 == res.failed) ? success : warn;
 
-        fn(res.message, wrapper);
+        fn(res.messages.join('<br>'), wrapper);
     };
 
     var onNukeSuccess = function (res) {
