@@ -5,6 +5,7 @@ parameters:
     query_path     : "%kernel.root_dir%/../var/sparql"
     certs_path     : "%kernel.root_dir%/../var/certs/cacert.pem"
     data_path      : "%kernel.root_dir%/../var/data"
+    cookie_path    : "%kernel.root_dir%/../var/cookies/cookiejar.json"
 
     cache:
         adapter:
@@ -30,7 +31,7 @@ services:
     
     app.service.mediawiki:
         class    : AppBundle\Service\MediaWiki
-        arguments: ["%certs_path%", "@zend_cache"]
+        arguments: ["%certs_path%", "%cookie_path%", "@zend_cache"]
 
     twig.extension.running_text_map:
         class    : AppBundle\Twig\Extension\RunningTextMap

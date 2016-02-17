@@ -5,6 +5,7 @@ namespace AppBundle\Service;
 use AppBundle\Enum\EditResult;
 use AppBundle\Enum\LoginResult;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Cookie\FileCookieJar;
 use Zend\Cache\Storage\StorageInterface;
 
 class MediaWiki
@@ -36,24 +37,31 @@ class MediaWiki
     private $certsPath;
 
     /**
+     * Path to cookie jar
+     * @var string
+     */
+    private $cookiePath;
+
+    /**
      * Preview constructor.
-     * @param string           $certsPath
+     * @param string $certsPath
+     * @param string $cookiePath
      * @param StorageInterface $cache
      */
-    public function __construct($certsPath, StorageInterface $cache = null)
+    public function __construct($certsPath, $cookiePath, StorageInterface $cache = null)
     {
         $this->cache = $cache;
         $this->certsPath = $certsPath;
+        $this->cookiePath = $cookiePath;
     }
 
     /**
      * @param  string $username
      * @param  string $password
-     * @param  string $token
      * @return null|\array
      * @throws \Exception
      */
-    public function login($username, $password, $token = null)
+    public function login($username, $password)
     {
         $httpClient = $this->getHttpClient();
         $response   = $httpClient->post(self::API_PATH, [
@@ -61,7 +69,7 @@ class MediaWiki
                 'action'     => 'login',
                 'lgname'     => $username,
                 'lgpassword' => $password,
-                'lgtoken'    => $token,
+                'lgtoken'    => $this->token('login'),
                 'format'     => 'json',
             ]
         ]);
@@ -73,26 +81,15 @@ class MediaWiki
         $body  = json_decode($response->getBody());
         $login = $body->login;
 
-        switch ($login->result) {
-            case LoginResult::NEED_TOKEN:
-                return $this->login($username, $password, $login->token);
-                break;
-
-            case LoginResult::SUCCESS:
-                return [
-                    'success'  => true,
-                    'userid'   => $login->lguserid,
-                    'username' => $login->lgusername,
-                ];
-                break;
-
-            default:
-                return [
-                    'success' => false,
-                    'message' => LoginResult::messageFor($login->result),
-                ];
-                break;
-        }
+        return (LoginResult::SUCCESS == $login->result)
+            ? [
+                'success'  => true,
+                'userid'   => $login->lguserid,
+                'username' => $login->lgusername,
+            ] : [
+                'success' => false,
+                'message' => LoginResult::messageFor($login->result),
+            ];
     }
 
     /**
@@ -111,11 +108,11 @@ class MediaWiki
     }
 
     /**
-     * @param  $type
-     * @return mixed
+     * @param  string   $type   [optional] Token type, defaults to 'csrf'
+     * @return string
      * @throws \Exception
      */
-    public function token($type)
+    public function token($type = 'csrf')
     {
         $httpClient = $this->getHttpClient();
         $response   = $httpClient->get(self::API_PATH, [
@@ -124,6 +121,7 @@ class MediaWiki
                 'prop'   => 'info',
                 'meta'   => 'tokens',
                 'format' => 'json',
+                'type'   => $type,
             ]
         ]);
 
@@ -133,13 +131,14 @@ class MediaWiki
 
         $body   = json_decode($response->getBody());
         $tokens = $body->query->tokens;
+        $tname  = sprintf('%stoken', $type);
 
-        if (!property_exists($tokens, $type)) {
+        if (!property_exists($tokens, $tname)) {
             $msg = sprintf("Requested token type '%s' was not present in the response", $type);
             throw new \Exception($msg);
         }
 
-        return $tokens->{$type};
+        return $tokens->{$tname};
     }
 
     /**
@@ -155,7 +154,7 @@ class MediaWiki
                 'action'       => 'edit',
                 'format'       => 'json',
                 'contentmodel' => 'wikitext',
-                'token'        => $this->token('csrftoken'),
+                'token'        => $this->token('csrf'),
                 'title'        => self::WIKI_NAMESPACE . $title,
                 'text'         => $wikiText,
             ]
@@ -235,11 +234,11 @@ class MediaWiki
         if (null == $this->httpClient) {
             $this->httpClient = new HttpClient([
                 'base_uri' => self::BASE_URI,
-                'cookies'  => true,
+                'cookies'  => new FileCookieJar($this->cookiePath, true),
                 'verify'   => $this->certsPath,
                 'headers'  => [
                     'User-Agent' => self::USER_AGENT,
-                ]
+                ],
             ]);
         }
         
