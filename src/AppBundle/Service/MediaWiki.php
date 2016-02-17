@@ -24,7 +24,7 @@ class MediaWiki
 
     const TALK_PREFIX = 'Overleg ';
 
-    const TALK_PRELUDE = '{{DisclaimerVerzetskrantenproject}}';
+    const TALK_PRELUDE = 'Dit artikel is geschreven in het kader van het [[Wikipedia:Wikiproject/Verzetskranten|Wikiproject Verzetskranten]]';
 
     /**
      * HTTP Client
