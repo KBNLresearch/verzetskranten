@@ -11,12 +11,16 @@ use Zend\Cache\Storage\StorageInterface;
 class MediaWiki
 {
     const BASE_URI = 'https://nl.wikipedia.org/';
-    
+
     const API_PATH = 'w/api.php';
-    
+
     const USER_AGENT = 'KoninklijkeBibliotheekVerzetskranten/1.0';
-    
-    const WIKI_NAMESPACE = 'Wikipedia:Wikiproject/Verzetskranten/Beginnetjes/';
+
+    const NS_MAIN  = '';
+
+    const NS_STUBS = 'Wikipedia:Wikiproject/Verzetskranten/Beginnetjes/';
+
+    const DEFAULT_NS = 'stubs';
 
     const TALK_PREFIX = 'Overleg ';
 
@@ -45,6 +49,15 @@ class MediaWiki
      * @var string
      */
     private $cookiePath;
+
+    /**
+     * Available namespaces
+     * @var array
+     */
+    private $namespaces = [
+        'main'  => self::NS_MAIN,
+        'stubs' => self::NS_STUBS,
+    ];
 
     /**
      * Preview constructor.
@@ -172,13 +185,18 @@ class MediaWiki
     }
 
     /**
-     * @param  $title
-     * @param  $wikiText
+     * @param  string $title
+     * @param  string $wikiText
+     * @param  string $namespace
      * @throws \Exception
      */
-    public function edit($title, $wikiText)
+    public function edit($title, $wikiText, $namespace = self::DEFAULT_NS)
     {
-        $pageTitle = self::WIKI_NAMESPACE . $title;
+        $ns = (array_key_exists($namespace, $this->namespaces))
+            ? $this->namespaces[$namespace]
+            : $this->namespaces[self::DEFAULT_NS];
+
+        $pageTitle = $ns . $title;
         $talkTitle = self::TALK_PREFIX . $pageTitle;
 
         $httpClient = $this->getHttpClient();
