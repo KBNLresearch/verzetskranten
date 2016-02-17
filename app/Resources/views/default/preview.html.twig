@@ -17,10 +17,20 @@
                     Update preview
                 </button>
                 {% if wiki_title is defined %}
-                <button id="btn-export" type="button" class="btn btn-default btn-xs pull-right">
-                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                    Export
-                </button>
+                <div class="btn-group pull-right">
+                    <button id="btn-export" type="button" class="btn btn-default btn-xs" data-nsname="stubs">
+                        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                        Export to <span class="ns-name">Stubs</span>
+                    </button>
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"><!-- --></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-nsname="stubs">Beginnetjes</a></li>
+                        <li><a href="#" data-nsname="main">Main</a></li>
+                    </ul>
+                </div>
                 {% endif %}
             </h4>
         </div>
@@ -75,7 +85,12 @@
         titWiki = $('#wiki-title'),
         txtWiki = $('#wiki-text'),
         txtHtml = $('#html-text'),
-        colHtml = $('#collapse-html');
+        colHtml = $('#collapse-html'),
+        btnConvert  = $('#btn-convert'),
+        btnExport   = $('#btn-export'),
+        btnExportNs = $('span.ns-name', btnExport),
+        btnNsSelect = $('ul li a', btnExport.parent());
+
 
     var success = function (msg, target) {
         var target = (undefined === target) ? window : target,
@@ -124,7 +139,7 @@
         fn(res.messages.join('<br>'), wrapper);
     };
 
-    var onBtnExportClick = function () {
+    var onBtnExportClick = function (evt) {
         if (!window.confirm('Are you sure you want to export this items?')) {
             return;
         }
@@ -134,13 +149,22 @@
             success: onExportSuccess,
             data   : {
                 wikititle: titWiki.val(),
-                wikitext : txtWiki.val()
+                wikitext : txtWiki.val(),
+                ns       : $(evt.target).data('nsname')
             }
         });
     };
 
-    $('#btn-convert').on('click', onBtnConvertClick);
-    $('#btn-export').on('click', onBtnExportClick);
+    var onBtnNsSelectClick = function (evt) {
+        var ns = $(evt.target).data('nsname');
+
+        btnExport.data('nsname', ns);
+        btnExportNs.html(ns.substr(0, 1).toUpperCase() + ns.substr(1))
+    };
+
+    btnConvert.on('click', onBtnConvertClick);
+    btnExport.on('click', onBtnExportClick);
+    btnNsSelect.on('click', onBtnNsSelectClick);
 }());
 </script>
 {% endblock %}
