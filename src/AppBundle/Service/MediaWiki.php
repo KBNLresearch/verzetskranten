@@ -18,6 +18,10 @@ class MediaWiki
     
     const WIKI_NAMESPACE = 'Wikipedia:Wikiproject/Verzetskranten/Beginnetjes/';
 
+    const TALK_PREFIX = 'Overleg ';
+
+    const TALK_PRELUDE = '{{DisclaimerVerzetskrantenproject}}';
+
     /**
      * HTTP Client
      * @var HttpClient
@@ -142,12 +146,41 @@ class MediaWiki
     }
 
     /**
+     * @param  string $title
+     * @return array
+     * @throws \Exception
+     */
+    public function info($title)
+    {
+        $httpClient = $this->getHttpClient();
+        $response   = $httpClient->get(self::API_PATH, [
+            'query' => [
+                'action' => 'query',
+                'format' => 'json',
+                'prop'   => 'info',
+                'inprop' => 'talkid',
+                'titles' => $title
+            ]
+        ]);
+
+        if (200 != $response->getStatusCode()) {
+            throw new \Exception("Requested failed");
+        }
+
+        $body = json_decode($response->getBody(), true);
+        return array_shift($body['query']['pages']);
+    }
+
+    /**
      * @param  $title
      * @param  $wikiText
      * @throws \Exception
      */
     public function edit($title, $wikiText)
     {
+        $pageTitle = self::WIKI_NAMESPACE . $title;
+        $talkTitle = self::TALK_PREFIX . $pageTitle;
+
         $httpClient = $this->getHttpClient();
         $response   = $httpClient->post(self::API_PATH, [
             'form_params' => [
@@ -155,7 +188,7 @@ class MediaWiki
                 'format'       => 'json',
                 'contentmodel' => 'wikitext',
                 'token'        => $this->token('csrf'),
-                'title'        => self::WIKI_NAMESPACE . $title,
+                'title'        => $pageTitle,
                 'text'         => $wikiText,
             ]
         ]);
@@ -174,6 +207,24 @@ class MediaWiki
             if (property_exists($body, 'captcha')) {
                 $msg = sprintf('Edit requires <a href="%s%s">captcha</a>', self::BASE_URI, $body->captcha->url);
                 throw new \Exception($msg);
+            }
+        }
+
+        $info = $this->info($pageTitle);
+        if (!array_key_exists('talkid', $info)) {
+            $response   = $httpClient->post(self::API_PATH, [
+                'form_params' => [
+                    'action'       => 'edit',
+                    'format'       => 'json',
+                    'contentmodel' => 'wikitext',
+                    'token'        => $this->token('csrf'),
+                    'title'        => $talkTitle,
+                    'text'         => self::TALK_PRELUDE,
+                ]
+            ]);
+
+            if (200 != $response->getStatusCode()) {
+                throw new \Exception("Requested failed");
             }
         }
     }
