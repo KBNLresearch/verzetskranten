@@ -5,6 +5,7 @@ namespace AppBundle\Service;
 use AppBundle\Enum\EditResult;
 use AppBundle\Enum\LoginResult;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Cookie\FileCookieJar;
 use Zend\Cache\Storage\StorageInterface;
 
 class MediaWiki
@@ -36,14 +37,22 @@ class MediaWiki
     private $certsPath;
 
     /**
+     * Path to cookie jar
+     * @var string
+     */
+    private $cookiePath;
+
+    /**
      * Preview constructor.
-     * @param string           $certsPath
+     * @param string $certsPath
+     * @param string $cookiePath
      * @param StorageInterface $cache
      */
-    public function __construct($certsPath, StorageInterface $cache = null)
+    public function __construct($certsPath, $cookiePath, StorageInterface $cache = null)
     {
         $this->cache = $cache;
         $this->certsPath = $certsPath;
+        $this->cookiePath = $cookiePath;
     }
 
     /**
@@ -225,11 +234,11 @@ class MediaWiki
         if (null == $this->httpClient) {
             $this->httpClient = new HttpClient([
                 'base_uri' => self::BASE_URI,
-                'cookies'  => true,
+                'cookies'  => new FileCookieJar($this->cookiePath, true),
                 'verify'   => $this->certsPath,
                 'headers'  => [
                     'User-Agent' => self::USER_AGENT,
-                ]
+                ],
             ]);
         }
         

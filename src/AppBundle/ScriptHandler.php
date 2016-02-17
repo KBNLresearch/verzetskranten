@@ -19,4 +19,17 @@ class ScriptHandler
             }
         }
     }
+
+    public static function createCookieJar(Event $evt)
+    {
+        $dir = 'var' . DIRECTORY_SEPARATOR . 'cookies' . DIRECTORY_SEPARATOR;
+        if (!file_exists($dir)) {
+            mkdir($dir, 0760, true);
+        }
+
+        $cookiePath = $dir . 'cookiejar.json';
+        if (!file_exists($cookiePath)) {
+            touch($cookiePath);
+        }
+    }
 }
