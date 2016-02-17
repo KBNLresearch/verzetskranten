@@ -14,10 +14,20 @@
         <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
         Download
     </a>
-    <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled">
-        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-        Export
-    </a>
+    <div class="btn-group">
+        <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled" data-nsname="stubs">
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+            Export to <span class="ns-name">Stubs</span>
+        </a>
+        <button type="button" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"><!-- --></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#" data-nsname="stubs">Beginnetjes</a></li>
+            <li><a href="#" data-nsname="main">Main</a></li>
+        </ul>
+    </div>
     <a id="btn-nuke" role="button" class="btn btn-default navbar-btn" title="Nuke Application Cache!">
         <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
         Kaboom!
@@ -73,6 +83,8 @@
         btnPreview  = $('#btn-preview'),
         btnDownload = $('#btn-download'),
         btnExport   = $('#btn-export'),
+        btnExportNs = $('span.ns-name', btnExport),
+        btnNsSelect = $('ul li a', btnExport.parent()),
         btnNuke     = $('#btn-nuke'),
         btnDebug    = $('#btn-debug'),
         btnLogin    = $('#btn-login'),
@@ -160,7 +172,7 @@
         window.location = '{{ path('wiki_download') }}?ids=' + JSON.stringify(ids);
     };
 
-    var onBtnExportClick = function () {
+    var onBtnExportClick = function (evt) {
         if (!window.confirm('Are you sure you want to export the selected items?')) {
             return;
         }
@@ -173,9 +185,17 @@
             method : 'POST',
             success: onExportSuccess,
             data   : {
-                ids: JSON.stringify(ids)
+                ids: JSON.stringify(ids),
+                ns : $(evt.target).data('nsname')
             }
         });
+    };
+
+    var onBtnNsSelectClick = function (evt) {
+        var ns = $(evt.target).data('nsname');
+
+        btnExport.data('nsname', ns);
+        btnExportNs.html(ns.substr(0, 1).toUpperCase() + ns.substr(1))
     };
 
     var onBtnNukeClick = function () {
@@ -247,6 +267,7 @@
     btnPreview.on('click', onBtnPreviewClick);
     btnDownload.on('click', onBtnDownloadClick);
     btnExport.on('click', onBtnExportClick);
+    btnNsSelect.on('click', onBtnNsSelectClick);
     btnNuke.on('click', onBtnNukeClick);
     btnDebug.on('click', createDebugHandler());
     btnLogin.on('click', onBtnLoginClick);

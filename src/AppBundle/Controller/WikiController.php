@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\MediaWiki;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,6 +161,7 @@ class WikiController extends Controller
         $dao       = $this->get('app.dao.dop');
         $twig      = $this->get('twig');
         $winkelNrs = json_decode($request->get('ids', '[]'));
+        $namespace = $request->request->get('ns', MediaWiki::DEFAULT_NS);
         $mediawiki = $this->get('app.service.mediawiki');
         $session   = new Session();
 
@@ -180,7 +182,7 @@ class WikiController extends Controller
             if (null !== ($wikititle = $request->request->get('wikititle')) &&
                 null !== ($wikitext  = $request->request->get('wikitext'))) {
                 try {
-                    $mediawiki->edit($wikititle, $wikitext);
+                    $mediawiki->edit($wikititle, $wikitext, $namespace);
                     $results['success']++;
                 } catch (\Exception $e) {
                     $results['failed']++;
@@ -210,7 +212,7 @@ class WikiController extends Controller
 
                     // post to wikipedia
                     try {
-                        $mediawiki->edit($blad->titelWP, $wikitext);
+                        $mediawiki->edit($blad->titelWP, $wikitext, $namespace);
                         $results['success']++;
                     } catch (\Exception $e) {
                         $results['failed']++;
