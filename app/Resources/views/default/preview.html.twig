@@ -25,6 +25,10 @@
             <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
             Update preview
         </button>
+        <button id="btn-debug" type="button" class="btn btn-default navbar-btn" data-toggle="button" aria-pressed="false">
+            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+            Debug
+        </button>
     </div>
 </nav>
 
@@ -92,7 +96,8 @@
         btnConvert  = $('#btn-convert'),
         btnExport   = $('#btn-export'),
         btnExportNs = $('span.ns-name', btnExport),
-        btnNsSelect = $('ul li a', btnExport.parent());
+        btnNsSelect = $('ul li a', btnExport.parent()),
+        btnDebug    = $('#btn-debug');
 
 
     var success = function (msg, target) {
@@ -165,9 +170,26 @@
         btnExportNs.html(ns.substr(0, 1).toUpperCase() + ns.substr(1))
     };
 
+    var createDebugHandler = function () {
+        var debugEnabled = false,
+                noop         = function () {},
+                xdebug       = function (xhr, o) {
+                    var separator = (-1 == '?'.indexOf(o.url)) ? '?' : '&';
+                    o.url = o.url + separator + 'XDEBUG_SESSION_START';
+                };
+
+        return function (evt) {
+            evt.preventDefault();
+
+            $.ajaxSettings.beforeSend = (debugEnabled) ? noop : xdebug;
+            debugEnabled = !debugEnabled;
+        };
+    };
+
     btnConvert.on('click', onBtnConvertClick);
     btnExport.on('click', onBtnExportClick);
     btnNsSelect.on('click', onBtnNsSelectClick);
+    btnDebug.on('click', createDebugHandler());
 }());
 </script>
 {% endblock %}
