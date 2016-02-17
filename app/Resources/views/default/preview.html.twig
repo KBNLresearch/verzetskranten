@@ -3,6 +3,29 @@
 {% block body %}
 <nav class="navbar navbar-default">
     <a href="{{ path('homepage') }}" class="btn navbar-btn">Back to Overview</a>
+
+    <div class="btn-group pull-right">
+        {% if wiki_title is defined %}
+        <div class="btn-group">
+            <button id="btn-export" type="button" class="btn btn-default navbar-btn" data-nsname="stubs">
+                <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                Export to <span class="ns-name">Stubs</span>
+            </button>
+            <button type="button" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"><!-- --></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-nsname="stubs">Beginnetjes</a></li>
+                <li><a href="#" data-nsname="main">Main</a></li>
+            </ul>
+        </div>
+        {% endif %}
+        <button id="btn-convert" type="button" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+            Update preview
+        </button>
+    </div>
 </nav>
 
 <div id="accordion" class="panel-group" role="tablist" aria-multiselectable="true">
@@ -12,26 +35,6 @@
                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-wiki" aria-expanded="true" aria-controls="collapse-wiki">
                     Wiki Text
                 </a>
-                <button id="btn-convert" type="button" class="btn btn-default btn-xs pull-right">
-                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
-                    Update preview
-                </button>
-                {% if wiki_title is defined %}
-                <div class="btn-group pull-right">
-                    <button id="btn-export" type="button" class="btn btn-default btn-xs" data-nsname="stubs">
-                        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                        Export to <span class="ns-name">Stubs</span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"><!-- --></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" data-nsname="stubs">Beginnetjes</a></li>
-                        <li><a href="#" data-nsname="main">Main</a></li>
-                    </ul>
-                </div>
-                {% endif %}
             </h4>
         </div>
         <div id="collapse-wiki" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-wiki">
@@ -72,7 +75,7 @@
     height: 500px;
     border: none;
 }
-.panel-title button:not(:first-child) {
+.navbar > .btn-group {
     margin: 0 5px;
 }
 </style>
