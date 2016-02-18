@@ -1,0 +1,14 @@
+PREFIX bf: <http://bibframe.org/vocab/>
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
+
+SELECT DISTINCT 
+    (STR(?winkelID) AS ?WinkelNr)
+    ?inhCat
+    (REPlACE(STR(?inhCat), "http://almere.pilod.nl/LydiaWinkel/(?:Categorie|Category)?([A-Z]\\w+)$", "$1", "i") AS ?inhoud)
+FROM <http://almere.pilod.nl/LydiaWinkel/>
+WHERE {
+    ?ts a ns0:UndergroundPublication .
+    ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    ?ts bf:contentCategory ?inhCat .
+    FILTER (STR(?winkelID) = %1%)
+}

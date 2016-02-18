@@ -1,0 +1,13 @@
+PREFIX bf: <http://bibframe.org/vocab/>
+PREFIX ns0: <http://almere.pilod.nl/LydiaWinkel/>
+
+SELECT DISTINCT 
+  (STR(?winkelID) AS ?WinkelNr)
+  (STR(?reprMeth) AS ?Name)
+FROM <http://almere.pilod.nl/LydiaWinkel/>
+WHERE {
+    ?ts a ns0:UndergroundPublication .
+    ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
+    ?ts bf:hasInstance/bf:edition ?reprMeth .
+    FILTER (STR(?winkelID) = %1%)
+}
