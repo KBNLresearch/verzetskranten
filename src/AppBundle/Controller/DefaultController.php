@@ -95,6 +95,8 @@ class DefaultController extends Controller
         $personen = $dao->dopPersonenBijBlad('"' . $winkelnr . '"');
         $drukkers = $dao->dopDrukkerijVanBlad('"' . $winkelnr . '"');
         $relaties = $dao->dopGerelateerdeBladen('"' . $winkelnr . '"');
+        $reproductieMethoden = $dao->dopReproductiemethodeVanBlad('"' . $winkelnr . '"');
+        $inhoudsVormen       = $dao->dopInhoudsvormVanBlad('"' . $winkelnr . '"');
 
         $wikiText = $twig->render('default/wiki.html.twig', [
             'blad'     => $bladen[0],
@@ -102,6 +104,8 @@ class DefaultController extends Controller
             'personen' => $personen,
             'drukkers' => $drukkers,
             'relaties' => $relaties,
+            'reproductieMethoden' => $reproductieMethoden,
+            'inhoudsVormen'       => $inhoudsVormen,
         ]);
 
         $htmlPreview = $mediawiki->preview($wikiText);

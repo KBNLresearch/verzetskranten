@@ -8,12 +8,12 @@
 | onderschrift            = 
 | ondertitel              = 
 | motto                   = 
-| plaats van uitgave      = {{ blad.PlaatsUitgave|default('')|capitalize }}
+| plaats van uitgave      = {% for plaats in plaatsen %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ plaats.PlaatsUitgave|default('')|capitalize }}{% endfor %} 
 | verspreidingsgebied     = 
 | verschijningsfrequentie = {{ blad.frequentie|default('')|frequency|capitalize }}
-| inhoud                  = {{ blad.inhoud|default('')|main_content|capitalize }}
+| inhoud                  = {% for inhoudsVorm in inhoudsVormen %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ inhoudsVorm.inhoud|default('')|main_content|capitalize }}{% endfor %} 
 | doelgroep               = 
-| reproductiemethode      = {{ blad.reprMeth|default('')|repro_method|capitalize }}
+| reproductiemethode(n)   = {% for reprMeth in reproductieMethoden %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ reprMeth.Name|default('')|repro_method|capitalize }}{% endfor %} 
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}Tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {% if blad.tijdstipEersteUitgave is defined %}{{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}{% endif %} 
 | datum laatste uitgave   = {% if blad.tijdstipLaatsteUitgave is defined %}{{ blad.tijdstipLaatsteUitgave|default('')|localdate('long') }}{% endif %} 
@@ -92,15 +92,34 @@
     {% set summary = summary ~ "." %}
 {% endif %}
 {#Derde zin#}
-{% if blad.reprMeth is defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method} en de inhoud bestond voornamelijk uit #{blad.inhoud|main_content}." %}
+{% if reproductieMethoden|length > 0 %}
+    {% set summary = summary ~ " Het werd " %}
+    {% for reprMeth in reproductieMethoden %}
+        {% if loop.length > 1 and loop.first == false and loop.last == false %}
+            {% set summary = summary ~ ', ' %}
+        {% elseif loop.length > 1 and loop.last == true %}
+            {% set summary = summary ~ ' en ' %}
+        {% endif %}
+        {% set summary = summary ~ "#{reprMeth.Name|default('')|repro_method}" %}
+    {% endfor %}
 {% endif %}
-{% if blad.reprMeth is defined and blad.inhoud is not defined %}
-    {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method}." %}
+{% if reproductieMethoden|length > 0 and inhoudsVormen|length > 0 %}
+    {% set summary = summary ~ ' en de' %}
+{% elseif inhoudsVormen|length > 0 %}
+    {% set summary = summary ~ ' De' %}
 {% endif %}
-{% if blad.reprMeth is not defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " De inhoud bestond voornamelijk uit #{blad.inhoud|main_content}." %}
+{% if inhoudsVormen|length > 0 %}
+    {% set summary = summary ~ " inhoud bestond voornamelijk uit " %}
+    {% for inhoudsVorm in inhoudsVormen %}
+        {% if loop.length > 1 and loop.first == false and loop.last == false %}
+            {% set summary = summary ~ ', ' %}
+        {% elseif loop.length > 1 and loop.last == true %}
+            {% set summary = summary ~ ' en ' %}
+        {% endif %}
+        {% set summary = summary ~ "#{inhoudsVorm.inhoud|default('')|main_content}" %}
+    {% endfor %}
 {% endif %}
+{% set summary = summary ~ '.' %}
 {% endspaceless %}
 {{ summary|raw }}
 {% if personen|length > 0 %}

@@ -83,12 +83,17 @@ class WikiController extends Controller
             $personen = $dao->dopPersonenBijBlad('"' . $result->WinkelNr . '"');
             $drukkers = $dao->dopDrukkerijVanBlad('"' . $result->WinkelNr . '"');
             $relaties = $dao->dopGerelateerdeBladen('"' . $result->WinkelNr . '"');
+            $reproductieMethoden = $dao->dopReproductiemethodeVanBlad('"' . $result->WinkelNr . '"');
+            $inhoudsVormen       = $dao->dopInhoudsvormVanBlad('"' . $result->WinkelNr . '"');
+
             $contents = $twig->render('default/wiki.html.twig', [
                 'blad'     => $result,
                 'plaatsen' => $plaatsen,
                 'personen' => $personen,
                 'drukkers' => $drukkers,
                 'relaties' => $relaties,
+                'reproductieMethoden' => $reproductieMethoden,
+                'inhoudsVormen'       => $inhoudsVormen,
             ]);
 
             $fileSystemSafeTitle = strtolower(preg_replace('/[^a-z-0-9\-\_]/i', '-', $result->titelWP));
@@ -202,12 +207,17 @@ class WikiController extends Controller
                     $personen = $dao->dopPersonenBijBlad('"' . $blad->WinkelNr . '"');
                     $drukkers = $dao->dopDrukkerijVanBlad('"' . $blad->WinkelNr . '"');
                     $relaties = $dao->dopGerelateerdeBladen('"' . $blad->WinkelNr . '"');
+                    $reproductieMethoden = $dao->dopReproductiemethodeVanBlad('"' . $blad->WinkelNr . '"');
+                    $inhoudsVormen       = $dao->dopInhoudsvormVanBlad('"' . $blad->WinkelNr . '"');
+
                     $wikitext = $twig->render('default/wiki.html.twig', [
                         'blad'     => $blad,
                         'plaatsen' => $plaatsen,
                         'personen' => $personen,
                         'drukkers' => $drukkers,
                         'relaties' => $relaties,
+                        'reproductieMethoden' => $reproductieMethoden,
+                        'inhoudsVormen'       => $inhoudsVormen,
                     ]);
 
                     // post to wikipedia
