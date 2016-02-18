@@ -13,7 +13,7 @@
 | verschijningsfrequentie = {{ blad.frequentie|default('')|frequency|capitalize }}
 | inhoud                  = {% for inhoudsVorm in inhoudsVormen %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ inhoudsVorm.inhoud|default('')|main_content|capitalize }}{% endfor %} 
 | doelgroep               = 
-| reproductiemethode(n)   = {% for reprMeth in reproductieMethoden %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ reprMeth.Name|default('')|repro_method|capitalize }}{% endfor %} 
+| reproductiemethode   = {% for reprMeth in reproductieMethoden %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ reprMeth.Name|default('')|repro_method|capitalize }}{% endfor %} 
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}Tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {% if blad.tijdstipEersteUitgave is defined %}{{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}{% endif %} 
 | datum laatste uitgave   = {% if blad.tijdstipLaatsteUitgave is defined %}{{ blad.tijdstipLaatsteUitgave|default('')|localdate('long') }}{% endif %} 
