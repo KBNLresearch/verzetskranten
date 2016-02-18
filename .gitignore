@@ -119,8 +119,10 @@ fabric.properties
 
 # Cache and logs (Symfony3)
 /var/cache/*
+/var/cookies/*
 /var/logs/*
 !var/cache/.gitkeep
+!var/cookies/.gitkeep
 !var/logs/.gitkeep
 
 # Parameters

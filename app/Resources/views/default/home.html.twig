@@ -2,6 +2,10 @@
 
 {% block body %}
 <div role="toolbar" class="btn-group pull-left">
+    <a id="btn-index" role="button" class="btn btn-default navbar-btn">
+        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+        Index
+    </a>
     <a id="btn-preview" role="button" class="btn btn-default navbar-btn disabled">
         <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
         Preview
@@ -10,14 +14,28 @@
         <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
         Download
     </a>
-    <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled">
-        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-        Export
-    </a>
+    <div class="btn-group">
+        <a id="btn-export" role="button" class="btn btn-default navbar-btn disabled" data-nsname="stubs">
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+            Export to <span class="ns-name">Stubs</span>
+        </a>
+        <button type="button" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"><!-- --></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#" data-nsname="stubs">Beginnetjes</a></li>
+            <li><a href="#" data-nsname="main">Main</a></li>
+        </ul>
+    </div>
     <a id="btn-nuke" role="button" class="btn btn-default navbar-btn" title="Nuke Application Cache!">
         <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
         Kaboom!
     </a>
+    <button id="btn-debug" type="button" class="btn btn-default navbar-btn" data-toggle="button" aria-pressed="false">
+        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+        Debug
+    </button>
     <div id="info-login" class="pull-left" {% if login.username is not defined %}style="display: none;"{% endif %}>
         <p class="navbar-text">Signed in as <span id="info-username">{{ login.username|default('Guest') }}</span></p>
         <button id="btn-logout" type="submit" class="btn btn-default">Logout</button>
@@ -61,10 +79,14 @@
 <script>
 (function () {
     var wrapper     = $('#wrapper'),
+        btnIndex    = $('#btn-index'),
         btnPreview  = $('#btn-preview'),
         btnDownload = $('#btn-download'),
         btnExport   = $('#btn-export'),
+        btnExportNs = $('span.ns-name', btnExport),
+        btnNsSelect = $('ul li a', btnExport.parent()),
         btnNuke     = $('#btn-nuke'),
+        btnDebug    = $('#btn-debug'),
         btnLogin    = $('#btn-login'),
         btnLogout   = $('#btn-logout'),
         infoLogin   = $('#info-login'),
@@ -118,9 +140,9 @@
     };
 
     var onExportSuccess = function (res) {
-        var fn = (true == res.success) ? success : warn;
+        var fn = (0 < res.success && 0 == res.failed) ? success : warn;
 
-        fn(res.message, wrapper);
+        fn(res.messages.join('<br>'), wrapper);
     };
 
     var onNukeSuccess = function (res) {
@@ -129,6 +151,10 @@
         } else  {
             warn('Failed to clear cache', wrapper);
         }
+    };
+
+    var onBtnIndexClick = function () {
+        window.location = '{{ path('index') }}';
     };
 
     var onBtnPreviewClick = function () {
@@ -146,7 +172,7 @@
         window.location = '{{ path('wiki_download') }}?ids=' + JSON.stringify(ids);
     };
 
-    var onBtnExportClick = function () {
+    var onBtnExportClick = function (evt) {
         if (!window.confirm('Are you sure you want to export the selected items?')) {
             return;
         }
@@ -159,9 +185,17 @@
             method : 'POST',
             success: onExportSuccess,
             data   : {
-                ids: JSON.stringify(ids)
+                ids: JSON.stringify(ids),
+                ns : $(evt.target).data('nsname')
             }
         });
+    };
+
+    var onBtnNsSelectClick = function (evt) {
+        var ns = $(evt.target).data('nsname');
+
+        btnExport.data('nsname', ns);
+        btnExportNs.html(ns.substr(0, 1).toUpperCase() + ns.substr(1))
     };
 
     var onBtnNukeClick = function () {
@@ -213,10 +247,29 @@
         btnExport.toggleClass('disabled', (0 === selection.length));
     };
 
+    var createDebugHandler = function () {
+        var debugEnabled = false,
+            noop         = function () {},
+            xdebug       = function (xhr, o) {
+                var separator = (-1 == '?'.indexOf(o.url)) ? '?' : '&';
+                o.url = o.url + separator + 'XDEBUG_SESSION_START';
+            };
+
+        return function (evt) {
+            evt.preventDefault();
+
+            $.ajaxSettings.beforeSend = (debugEnabled) ? noop : xdebug;
+            debugEnabled = !debugEnabled;
+        };
+    };
+
+    btnIndex.on('click', onBtnIndexClick);
     btnPreview.on('click', onBtnPreviewClick);
     btnDownload.on('click', onBtnDownloadClick);
     btnExport.on('click', onBtnExportClick);
+    btnNsSelect.on('click', onBtnNsSelectClick);
     btnNuke.on('click', onBtnNukeClick);
+    btnDebug.on('click', createDebugHandler());
     btnLogin.on('click', onBtnLoginClick);
     btnLogout.on('click', onBtnLogoutClick);
 

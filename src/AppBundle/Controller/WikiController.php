@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\MediaWiki;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,12 +83,17 @@ class WikiController extends Controller
             $personen = $dao->dopPersonenBijBlad('"' . $result->WinkelNr . '"');
             $drukkers = $dao->dopDrukkerijVanBlad('"' . $result->WinkelNr . '"');
             $relaties = $dao->dopGerelateerdeBladen('"' . $result->WinkelNr . '"');
+            $reproductieMethoden = $dao->dopReproductiemethodeVanBlad('"' . $result->WinkelNr . '"');
+            $inhoudsVormen       = $dao->dopInhoudsvormVanBlad('"' . $result->WinkelNr . '"');
+
             $contents = $twig->render('default/wiki.html.twig', [
                 'blad'     => $result,
                 'plaatsen' => $plaatsen,
                 'personen' => $personen,
                 'drukkers' => $drukkers,
                 'relaties' => $relaties,
+                'reproductieMethoden' => $reproductieMethoden,
+                'inhoudsVormen'       => $inhoudsVormen,
             ]);
 
             $fileSystemSafeTitle = strtolower(preg_replace('/[^a-z-0-9\-\_]/i', '-', $result->titelWP));
@@ -160,11 +166,15 @@ class WikiController extends Controller
         $dao       = $this->get('app.dao.dop');
         $twig      = $this->get('twig');
         $winkelNrs = json_decode($request->get('ids', '[]'));
+        $namespace = $request->request->get('ns', MediaWiki::DEFAULT_NS);
         $mediawiki = $this->get('app.service.mediawiki');
         $session   = new Session();
 
-        $success = false;
-        $message = null;
+        $results = [
+            'success'  => 0,
+            'failed'   => 0,
+            'messages' => [],
+        ];
 
         try {
             // check login
@@ -173,42 +183,62 @@ class WikiController extends Controller
                 throw new \Exception('Not logged in');
             }
 
-            // get edit token if not already present
-            if (null == ($token = $session->get('csrf', null))) {
-                $token = $mediawiki->token('csrf');
+            // export single blad
+            if (null !== ($wikititle = $request->request->get('wikititle')) &&
+                null !== ($wikitext  = $request->request->get('wikitext'))) {
+                try {
+                    $mediawiki->edit($wikititle, $wikitext, $namespace);
+                    $results['success']++;
+                } catch (\Exception $e) {
+                    $results['failed']++;
+                    $results['messages'][] = sprintf("Failed to export '%s'. Error: '%s'", $wikititle, $e->getMessage());
+                }
             }
 
-            // query all the selected bladen
-            $arg = implode(',', array_map(function($winkelNr) {
-                return sprintf('"%s"', $winkelNr);
-            }, $winkelNrs));
+            if (0 < count($winkelNrs)) {
+                // query all the selected bladen
+                $arg = implode(',', array_map(function($winkelNr) {
+                    return sprintf('"%s"', $winkelNr);
+                }, $winkelNrs));
 
-            $results = $dao->dopBladMetDetails($arg);
-            foreach($results as $result) {
-                $plaatsen = $dao->plaatsVanUitgave('"' . $result->WinkelNr . '"');
-                $personen = $dao->dopPersonenBijBlad('"' . $result->WinkelNr . '"');
-                $drukkers = $dao->dopDrukkerijVanBlad('"' . $result->WinkelNr . '"');
-                $relaties = $dao->dopGerelateerdeBladen('"' . $result->WinkelNr . '"');
-                $wikitext = $twig->render('default/wiki.html.twig', [
-                    'blad'     => $result,
-                    'plaatsen' => $plaatsen,
-                    'personen' => $personen,
-                    'drukkers' => $drukkers,
-                    'relaties' => $relaties,
-                ]);
+                $bladen = $dao->dopBladMetDetails($arg);
+                foreach($bladen as $blad) {
+                    $plaatsen = $dao->plaatsVanUitgave('"' . $blad->WinkelNr . '"');
+                    $personen = $dao->dopPersonenBijBlad('"' . $blad->WinkelNr . '"');
+                    $drukkers = $dao->dopDrukkerijVanBlad('"' . $blad->WinkelNr . '"');
+                    $relaties = $dao->dopGerelateerdeBladen('"' . $blad->WinkelNr . '"');
+                    $reproductieMethoden = $dao->dopReproductiemethodeVanBlad('"' . $blad->WinkelNr . '"');
+                    $inhoudsVormen       = $dao->dopInhoudsvormVanBlad('"' . $blad->WinkelNr . '"');
 
-                // post to wikipedia
-                $mediawiki->edit($token, $result->titelWP, $wikitext);
+                    $wikitext = $twig->render('default/wiki.html.twig', [
+                        'blad'     => $blad,
+                        'plaatsen' => $plaatsen,
+                        'personen' => $personen,
+                        'drukkers' => $drukkers,
+                        'relaties' => $relaties,
+                        'reproductieMethoden' => $reproductieMethoden,
+                        'inhoudsVormen'       => $inhoudsVormen,
+                    ]);
+
+                    // post to wikipedia
+                    try {
+                        $mediawiki->edit($blad->titelWP, $wikitext, $namespace);
+                        $results['success']++;
+                    } catch (\Exception $e) {
+                        $results['failed']++;
+                        $results['messages'][] = sprintf("Failed to export '%s'. Error: '%s'", $blad->titelWP, $e->getMessage());
+                    }
+                }
             }
 
-            $success = true;
-            $message = 'All selected lemmas exported successfully';
+            if (0 < $results['success'] && 0 == $results['failed']) {
+                $results['messages'][] = 'All selected lemmas exported successfully';
+            }
         } catch (\Exception $e) {
-            $message = $e->getMessage();
+            $results['messages'][] = $e->getMessage();
         }
 
-        $body = ['success' => $success, 'message' => $message];
-        return Response::create(json_encode($body), 200, [
+        return Response::create(json_encode($results), 200, [
             'Content-Type' => 'application/json',
         ]);
     }

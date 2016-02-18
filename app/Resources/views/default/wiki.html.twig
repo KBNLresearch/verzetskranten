@@ -1,7 +1,6 @@
 {% verbatim %}
 {{DisclaimerVerzetskrantenproject}}
 {% endverbatim %}
-__NOTOC__
 
 {% verbatim %}{{Infobox illegaal blad{% endverbatim %}
 | titel                   = {{ blad.titel|default('Ongetiteld verzetsblad') }}
@@ -9,22 +8,22 @@ __NOTOC__
 | onderschrift            = 
 | ondertitel              = 
 | motto                   = 
-| plaats van uitgave      = {{ blad.PlaatsUitgave|default('')|capitalize }}
+| plaats van uitgave      = {% for plaats in plaatsen %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ plaats.PlaatsUitgave|default('')|capitalize }}{% endfor %} 
 | verspreidingsgebied     = 
-| verschijningsfrequentie = {{ blad.frequentie|default('')|capitalize }}
-| inhoud                  = {{ blad.inhoud|default('')|main_content|capitalize }}
+| verschijningsfrequentie = {{ blad.frequentie|default('')|frequency|capitalize }}
+| inhoud                  = {% for inhoudsVorm in inhoudsVormen %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ inhoudsVorm.inhoud|default('')|main_content|capitalize }}{% endfor %} 
 | doelgroep               = 
-| reproductiemethode      = {{ blad.reprMeth|default('')|repro_method|capitalize }}
+| reproductiemethode      = {% for reprMeth in reproductieMethoden %}{% if loop.length > 1 and loop.first == false and loop.last == false %}, {% elseif loop.length > 1 and loop.last == true %} en {% endif %}{{ reprMeth.Name|default('')|repro_method|capitalize }}{% endfor %} 
 | oplage                  = {% if blad.oplageMin is defined and blad.oplageMax is defined %}Tussen de {{ blad.oplageMin }} en {{ blad.oplageMax }}{% else %}{{ blad.oplageMin|default('') }}{{ blad.oplageMax|default('') }}{% endif %} 
 | datum eerste uitgave    = {% if blad.tijdstipEersteUitgave is defined %}{{ blad.tijdstipEersteUitgave|default('')|localdate('long') }}{% endif %} 
 | datum laatste uitgave   = {% if blad.tijdstipLaatsteUitgave is defined %}{{ blad.tijdstipLaatsteUitgave|default('')|localdate('long') }}{% endif %} 
 | formaat                 = 
-| taal                    = Nederland
+| taal                    = Nederlands
 | vervaardigers           = {% for persoon in personen %}[[{{ persoon.naam }}]] {% endfor %} 
 | uitgevers               = 
 | drukkers                = {% for drukker in drukkers %}[[{{ drukker.naam }}]] {% endfor %} 
 | andere betrokkenen      = 
-| gerelateerd             = {% for relatie in relaties %}[[{{ relatie.EindWiki }}|{{ relatie.Eindblad }}]] {% endfor %} 
+| gerelateerd             = {% for relatie in relaties %}[[{{ relatie.EindWiki|default('Ongetiteld verzetsblad') }}|{{ relatie.Eindblad|default('Ongetiteld verzetsblad') }}]] {% endfor %} 
 | opvolger van            = 
 | voorloper van           = 
 | legaal voortgezet       = 
@@ -33,12 +32,11 @@ __NOTOC__
 | website                 = 
 | portaal2                = 
 {% verbatim %}}}{% endverbatim %}
-
 {#Use string concatenation for better whitespace control#}
 {% set summary = '' %}
 {% spaceless %}
 {#Eerste zin#}
-{% set summary = summary ~ "'''#{blad.titel|default('Ongetiteld verzetsblad')}''' was een verzetsblad uit de Tweede Wereldoorlog" %}
+{% set summary = summary ~ "'''#{blad.titel|default('Ongetiteld verzetsblad')}''' was een [[verzetsblad]] uit de [[Tweede Wereldoorlog]]" %}
 {% if blad.tijdstipEersteUitgave is defined and blad.tijdstipLaatsteUitgave is defined %}
     {% set summary = summary ~ ", dat vanaf #{blad.tijdstipEersteUitgave|localdate('long')} tot en met #{blad.tijdstipLaatsteUitgave|localdate('long')} " %}
 {% endif %}
@@ -80,34 +78,53 @@ __NOTOC__
         {% set summary = summary ~ ' Het blad verscheen' %}
     {% endif %}
     {% if blad.frequentie is defined %}
-        {% set summary = summary ~ " #{blad.frequentie}" %}
+        {% set summary = summary ~ " #{blad.frequentie|frequency}" %}
     {% endif %}
     {% if blad.oplageMin is defined or blad.oplageMax is defined %}
         {% set summary = summary ~ ' in een oplage' %}
-        {% if blad.oplageMin < blad.oplageMax %}
+        {% if blad.oplageMin is defined and blad.oplageMax is defined and blad.oplageMin < blad.oplageMax %}
             {% set summary = summary ~ " tussen de #{blad.oplageMin} en #{blad.oplageMax} exemplaren" %}
         {% endif %}
-        {% if blad.oplageMin == blad.oplageMax %}
+        {% if blad.oplageMin is defined and (blad.oplageMax is not defined or blad.oplageMin == blad.oplageMax) %}
             {% set summary = summary ~ " van #{blad.oplageMin} exemplaren" %}
         {% endif %}
     {% endif %}
     {% set summary = summary ~ "." %}
 {% endif %}
 {#Derde zin#}
-{% if blad.reprMeth is defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method} en de inhoud bestond voornamelijk uit #{blad.inhoud|main_content}." %}
+{% if reproductieMethoden|length > 0 %}
+    {% set summary = summary ~ " Het werd " %}
+    {% for reprMeth in reproductieMethoden %}
+        {% if loop.length > 1 and loop.first == false and loop.last == false %}
+            {% set summary = summary ~ ', ' %}
+        {% elseif loop.length > 1 and loop.last == true %}
+            {% set summary = summary ~ ' en ' %}
+        {% endif %}
+        {% set summary = summary ~ "#{reprMeth.Name|default('')|repro_method}" %}
+    {% endfor %}
 {% endif %}
-{% if blad.reprMeth is defined and blad.inhoud is not defined %}
-    {% set summary = summary ~ " Het werd #{blad.reprMeth|repro_method}." %}
+{% if reproductieMethoden|length > 0 and inhoudsVormen|length > 0 %}
+    {% set summary = summary ~ ' en de' %}
+{% elseif inhoudsVormen|length > 0 %}
+    {% set summary = summary ~ ' De' %}
 {% endif %}
-{% if blad.reprMeth is not defined and blad.inhoud is defined %}
-    {% set summary = summary ~ " De inhoud bestond voornamelijk uit #{blad.inhoud|main_content}." %}
+{% if inhoudsVormen|length > 0 %}
+    {% set summary = summary ~ " inhoud bestond voornamelijk uit " %}
+    {% for inhoudsVorm in inhoudsVormen %}
+        {% if loop.length > 1 and loop.first == false and loop.last == false %}
+            {% set summary = summary ~ ', ' %}
+        {% elseif loop.length > 1 and loop.last == true %}
+            {% set summary = summary ~ ' en ' %}
+        {% endif %}
+        {% set summary = summary ~ "#{inhoudsVorm.inhoud|default('')|main_content}" %}
+    {% endfor %}
 {% endif %}
+{% set summary = summary ~ '.' %}
 {% endspaceless %}
 {{ summary|raw }}
 {% if personen|length > 0 %}
 
-== Bij deze krant betrokken personen ==
+== Betrokken personen ==
 {% for persoon in personen %}
 * [[{{ persoon.naam }}]]
 {% endfor %}
@@ -116,29 +133,30 @@ __NOTOC__
 
 == Gerelateerde kranten ==
 {% for relatie in relaties %}
-* [[{{ relatie.EindWiki }}]]
+* [[{{ relatie.EindWiki|default('Ongetiteld verzetsblad') }}]]  <ref>''{{ relatie.Eindblad|default('Ongetiteld verzetsblad') }}'': Lemma {{ relatie.EindWinkelNr }} in [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|De ondergrondse pers 1940-1945]] (PDF)</ref>
 {% endfor %}
 {% endif %}
 
 {% verbatim %}{{Appendix||2={% endverbatim %}
-== Bronnen ==
+;Bronnen
 * {% verbatim %}{{nl}}{% endverbatim %} Lemma {{ blad.WinkelNr }} in [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers 1940-1945]], [[Lydia_Winkel|Lydia E. Winkel]] en Hans de Vries, 3e druk, 1989. [[:commons:File:PDF_of_De_Ondergrondse_Pers_1940-1945_-_derde_druk_-_1989.pdf|Full-text]] (PDF) op Wikimedia Commons.
 {% if blad.PPNFysiek is defined %}
-* {% verbatim %}{{nl}}{% endverbatim %} [http://www.delpher.nl/nl/kranten/results/index?page=1&cql%5B%5D=ppn%3D{{ blad.PPNFysiek }}&coll=dddtitel Afleveringen van de ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in full-text op [[Delpher|Delpher.nl]]
+* {% verbatim %}{{nl}}{% endverbatim %} [http://www.delpher.nl/nl/kranten/results/index?page=1&cql%5B%5D=ppn%3D{{ blad.PPNFysiek }}&coll=dddtitel Afleveringen van ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in full-text op [[Delpher|Delpher.nl]]
 {% endif %}
 {% if blad.PPNDigitaal is defined %}
-* {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
+* {% verbatim %}{{nl}}{% endverbatim %} [http://resolver.kb.nl/resolve?urn=PPN:{{ blad.PPNDigitaal }} Beschrijving van ''{{ blad.titel|default('Ongetiteld verzetsblad') }}''] in de catalogus van de [[Koninklijke_Bibliotheek_(Nederland)|Koninklijke Bibliotheek]]
 {% endif %}
 ;Overige bronnen en verwijzingen
-{% verbatim %}{{References||30em}}{% endverbatim %}
-== Noten ==
+{% verbatim %}{{References||50em}}{% endverbatim %}
+<!--== Noten ==
 * Dit artikel is geschreven in het kader van het [[Wikipedia:Wikiproject/Verzetskranten|Wikiproject Verzetskranten]]
 ;Overige noten
-{% verbatim %}{{references|group=noot||30em}}{% endverbatim %}
-== Externe links ==
+{% verbatim %}{{references|group=noot||50em}}{% endverbatim %}
+== Externe links == -->
 {% verbatim %}}}{% endverbatim %}
 
 {% verbatim %}{{commonscat|Dutch_resistance_newspapers from World War II|Dutch resistance newspapers from World War II}}{% endverbatim %}
+{% verbatim %}<!-- [[Categorie:Illegale pers in de Tweede Wereldoorlog]] -->{% endverbatim %}
 
 == Ruwe tekst Winkel-lemma==
 ''Hieronder staat de tekst over '''{{ blad.titel|default('Ongetiteld verzetsblad') }} (verzetsblad, {{ blad.PlaatsUitgave|default('') }})''' uit lemma nr. {{ blad.WinkelNr }} van [[De_ondergrondse_pers_1940-1945|De Ondergrondse Pers]]. Met behulp van deze tekst (en andere bronnen) kunnen Wikipedianen het bestaande artikel verbeteren. ''De Ondergronds Pers'' is ook als [[:commons:File:PDF of De Ondergrondse Pers 1940-1945 - derde druk - 1989.pdf|full-text PDF beschikbaar]] op Wikimedia Commons, daar is onderstaande tekst dus ook terug te vinden.''

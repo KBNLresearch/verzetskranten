@@ -9,12 +9,14 @@ PREFIX dct:  <http://purl.org/dc/terms/>
 
 SELECT DISTINCT 
     (STR(?winkelID) AS ?WinkelNr)
+    (STR(?naarWinkelID) AS ?EindWinkelNr)
     (STR(?naarTitel) AS ?Eindblad) 
     (STR(?naarWikiTitel) AS ?EindWiki)
 WHERE { 
     ?ref ns0:connectsReferencedToPublication ?naarTs ;
         dct:references ?vanTs . 
     ?vanTs ns0:idWinkel/bf:identifierValue ?winkelID .
+    ?naarTs ns0:idWinkel/bf:identifierValue ?naarWinkelID .
     OPTIONAL { ?naarTs bf:workTitle/bf:titleValue ?naarTitel }
     OPTIONAL { ?naarTs a ns0:UndergroundPublication ; ns0:titleDescriptiveArticle ?naarWikiTitel }
     FILTER(STR(?winkelID) = %1%)
