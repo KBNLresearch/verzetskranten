@@ -9,7 +9,6 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?titel) AS ?titel)
                 (STR(?ppnF) AS ?PPNFysiek)
                 (STR(?ppnD) AS ?PPNDigitaal)
-                (STR(?plts) AS ?PlaatsUitgave)
                 ?periodeVanVerschijnen
                 ?frequentie
                 (STR(?eerste) AS ?tijdstipEersteUitgave)
@@ -24,7 +23,6 @@ WHERE {
     ?ts ns0:titleDescriptiveArticle ?uniekeTitelVoorWP .
     ?ts ns0:idWinkel/bf:identifierValue ?winkelID .
     OPTIONAL { ?ts bf:workTitle/bf:titleValue ?titel }
-    OPTIONAL { ?ts bf:hasInstance/bf:publication/bf:providerPlace/dbo:name ?plts }
     OPTIONAL { ?ts ns0:periodDescription ?periodeVanVerschijnen }
     OPTIONAL { ?ts bf:hasInstance/ns0:fysicalPPN-KB/bf:identifierValue ?ppnF }
     OPTIONAL { ?ts bf:hasInstance/ns0:linkDelpher ?delpherLink }
