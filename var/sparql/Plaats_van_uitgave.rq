@@ -8,7 +8,7 @@ SELECT DISTINCT (STR(?winkelID) AS ?WinkelNr)
                 (STR(?titel) AS ?Blad)
                 (STR(?ppnF) AS ?PPNFysiek)
                 (STR(?ppnD) AS ?PPNDigitaal)
-                (STR(COALESCE(?plts1, ?plts2)) AS ?PlaatsUitgave)
+                (STR(COALESCE(?plts2, ?plts1)) AS ?PlaatsUitgave)
 FROM <http://almere.pilod.nl/LydiaWinkel/>
 WHERE {
     ?ts a ns0:UndergroundPublication .
