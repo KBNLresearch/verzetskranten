@@ -1,7 +1,13 @@
 # Verzetskranten Tweede Wereldoorlog - Koninklijke Bibliotheek
 
+## Werking
 Deze tool dient ervoor om informatie over Nederlandse verzetskranten uit de Tweede Wereldoorlog
 snel en consistent om te zetten naar beginnetjes van Wikipedia artikelen, opdat deze door de Wikipedia-gemeenschap aangevuld en verrijkt kunnen worden tot volwaardige artikelen.
+
+De resultaten na het draaien van de tool: 
+* [Deze lijst](https://nl.wikipedia.org/wiki/Wikipedia:Wikiproject/Verzetskranten/Beginnetjes) van 1300 krantentitels
+* 1300 artikelbeginnetjes ([voorbeeld](https://nl.wikipedia.org/wiki/Wikipedia:Wikiproject/Verzetskranten/Beginnetjes/Aethernieuws_%28verzetsblad,_Voorburg%29))   
+
 Zie https://nl.wikipedia.org/wiki/Wikipedia:Wikiproject/Verzetskranten voor meer informatie over het project waarbinnen deze tool ontwikkeld is
 
 ## Requirements
@@ -22,6 +28,7 @@ Git dient geinstalleerd te zijn. De meest recente versie voor uw besturingssyste
 
 ## Installatie
 Voer onderstaande commandos uit via de opdrachtregel
+
     git clone git@github.com:ookgezellig/verzetskranten.git
     cd verzetskranten
     composer install
